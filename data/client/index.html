@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Client</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="../medium-style-confirm/css/msc-style.css">
+</head>
+<body>
+  <div id="sidebar">
+    <iframe id="tree" src="about:blank"></iframe>
+  </div>
+  <div id="content">
+    <iframe id="search" src="about:blank"></iframe>
+    <iframe id="list" src="about:blank"></iframe>
+  </div>
+  <div id="popup" class="hide">
+    <iframe src="" sandbox="allow-scripts allow-popups"></iframe>
+  </div>
+  <script src="/webext/utils/EventEmitter.js"></script>
+  <script src="/webext/core/base.js"></script>
+  <script src="/webext/core/chrome.runtime.js"></script>
+  <script src="/webext/core/chrome.storage.js"></script>
+  <script src="../api.js"></script>
+  <script async src="../medium-style-confirm/js/msc-script.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

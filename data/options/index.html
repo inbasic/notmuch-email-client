@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Options :: Notmuch Email Client</title>
+  </head>
+  <style type="text/css">
+    textarea {
+      width: 100%;
+    }
+  </style>
+  <body>
+    <textarea rows="10" id="json"></textarea>
+    <p>
+      <input type="button" value="Save" id="save">
+      <span id="info"></span>
+    </p>
+
+    <script src="/webext/utils/EventEmitter.js"></script>
+    <script src="/webext/core/base.js"></script>
+    <script src="/webext/core/chrome.storage.js"></script>
+    <script src="/config.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

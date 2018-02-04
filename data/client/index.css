@@ -1,0 +1,60 @@
+html {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  height: 100%;
+}
+iframe {
+  border: solid 1px transparent;
+  box-sizing: border-box;
+}
+#content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+#sidebar {
+  display: flex;
+  min-width: 180px;
+  width: 200px;
+
+  resize: horizontal;
+  overflow: auto;
+
+  border-right: 1px solid #e5e5e5;
+
+  padding-right: 10px;
+}
+
+#tree {
+  width: 100%;
+}
+#search {
+  height: 60px;
+  background-color: #f1f1f1;
+  border-bottom: solid 1px #e5e5e5;
+}
+#list {
+  flex: 1;
+}
+
+#popup {
+  position: fixed;
+  top:  0;
+  left: 0;
+  padding: 40px;
+  width: calc(100% - 80px);
+  height: calc(100% - 80px);
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+}
+#popup.hide {
+  display: none;
+}
+#popup iframe {
+  width: 100%;
+  flex: 1;
+}

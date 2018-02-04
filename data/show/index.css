@@ -1,0 +1,84 @@
+body {
+  background-color: #fff;
+  font-size: 13px;
+  margin: 0;
+}
+body,
+pre {
+  font-size: 13px;
+  font-family: "Helvetica Neue",Helvetica,sans-serif;
+}
+
+.headers {
+  width: 100%;
+  border-top: solid 1px #bfbfbf;
+  border-bottom: solid 1px #bfbfbf;
+  font-size: 12px;
+  margin: 30px 0 10px 0;
+  padding: 5px 5px 5px;
+  background-color: rgba(0, 0, 0, 0.01);
+}
+#content>div:first-child .headers {
+  margin-top: 0;
+  padding-top: 5px;
+}
+.headers td:first-child {
+  width: 10px;
+  white-space: nowrap;
+  padding-right: 10px;
+  text-align: right;
+  font-weight: bold;
+  color: #a1a1a1;
+}
+.headers [data-id="subject"] {
+  font-weight: bold;
+}
+.body {
+  padding: 0 10px;
+}
+#content {
+  overflow: auto;
+}
+#attachments {
+  background-color: #efefef;
+  border-top: solid 1px #e1e1e1;
+  height: 28px;
+  padding: 0 10px;
+}
+#attachments label {
+  border-right: solid 1px rgba(0, 0, 0, 0.1);
+  padding-right: 5px;
+  margin-right: 5px;
+}
+#attachments a {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+[data-id="id"] {
+  padding-right: 10px;
+  text-align: left;
+}
+
+/* email related */
+td,
+table {
+  border: none;
+}
+pre {
+  white-space: pre-line;
+}
+
+blockquote {
+  margin: 0 0 0 10px;
+  padding: 0 5px;
+  color: #6a737d;
+  border-left: 2px solid #dfe2e5;
+  opacity: 0.9;
+}
+
+.PlainText {
+  color: #000;
+}
+

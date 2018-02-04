@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>This is a list</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+
+  <body>
+    <div id="toolbar">
+      <div>
+        <div class="list" data-visible=false>
+          <span></span>
+          <ul>
+            <li data-cmd="select-all">All</li>
+            <li data-cmd="select-none">None</li>
+            <li data-cmd="select-read">Read</li>
+            <li data-cmd="select-unread">Unread</li>
+            <li data-cmd="select-starred">Starred</li>
+            <li data-cmd="select-unstarred">Unstarred</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <input type="button" data-cmd="archive" class="selection">
+        <input type="button" data-cmd="spam" class="selection">
+        <input type="button" data-cmd="trash" class="selection">
+        <input type="button" data-cmd="mark-as-read" value="Mark as read" class="selection">
+      </div>
+
+      <div>
+        <input type="button" data-cmd="open" value="Open" class="selection">
+      </div>
+
+      <div>
+        <div class="list" data-visible=false>
+          <span></span>
+          <label>Extra</label>
+          <ul id="extra">
+            <li data-cmd="mark-as-unread" class="selection">Make as unread</li>
+            <li class="separator"></li>
+            <li data-cmd="copy-ids" class="selection">Copy selected IDs</li>
+            <li data-cmd="copy-filenames" class="selection">Copy filenames</li>
+          </ul>
+        </div>
+      </div>
+
+      <span></span>
+      <div>
+        <span><b id="start"></b>-<b id="end"></b></b> of <b id="total">-</b></span>&nbsp;
+        <input type="button" data-cmd="older" disabled="true">
+        <input type="button" data-cmd="newer" disabled="true">
+      </div>
+    </div>
+    <div id="root">
+      <table width=100%>
+        <colgroup>
+          <col width="2px">
+          <col width="27px">
+          <col width="32px">
+          <col width="40px">
+          <col width="200px" data-id="authors">
+          <col>
+          <col width="96px">
+        </colgroup>
+        <template id="entry">
+          <tr data-unread=true>
+            <td data-id="active">
+              <input type="radio" name="entry">
+              <label></label>
+            </td>
+            <td data-id="select">
+              <label></label>
+            </td>
+            <td data-id="star" data-cmd="toggle-flag"></td>
+            <td data-id="stat">-</td>
+            <td data-id="authors">-</td>
+            <td data-id="subject">
+              <div data-id="tags"></div>
+              <div></div>
+            </td>
+            <td data-id="date">-</td>
+          </tr>
+        </template>
+        <tbody id="content"></tbody>
+      </table>
+    </div>
+    <script src="/config.js"></script>
+    <script async src="index.js"></script>
+    <script src="/webext/utils/EventEmitter.js"></script>
+    <script src="/webext/core/base.js"></script>
+    <script src="/webext/core/chrome.runtime.js"></script>
+    <script src="/webext/core/chrome.storage.js"></script>
+    <script src="build.js"></script>
+    <script src="/data/utils.js"></script>
+    <script async src="commands.js"></script>
+    <script async src="plugins/user-commands.js"></script>
+  </body>
+</html>

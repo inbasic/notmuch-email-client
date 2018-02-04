@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Email Viewer</title>
+    <link rel="stylesheet" href="index.css">
+    <base target="_blank">
+  </head>
+
+  <body>
+    <template id="header">
+      <table class="headers">
+        <tr>
+          <td>ID</td>
+          <td data-id="id"></td>
+        </tr>
+        <tr>
+          <td>Filename</td>
+          <td data-id="filename"></td>
+        </tr>
+        <tr>
+          <td>Date</td>
+          <td data-id="date"></td>
+        </tr>
+        <tr>
+          <td>From</td>
+          <td data-id="from"></td>
+        </tr>
+        <tr>
+          <td>Subject</td>
+          <td data-id="subject"></td>
+        </tr>
+        <tr>
+          <td>To</td>
+          <td data-id="to"></td>
+        </tr>
+        <tr>
+          <td>Tags</td>
+          <td data-id="tags"></td>
+        </tr>
+      </table>
+    </template>
+    <div id="content"></div>
+    <script src="parse.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,256 @@
+html {
+  height: 100%;
+}
+body {
+  font-family: "Helvetica Neue",Helvetica,sans-serif;
+  font-size: 13px;
+  margin: 0;
+  height: 100%;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+}
+#root {
+  flex: 1;
+  overflow: auto;
+}
+
+#toolbar {
+  display: flex;
+  padding: 10px;
+}
+#toolbar>div {
+  display: flex;
+  align-items: center;
+}
+#toolbar>div:not(:last-child) {
+  margin-right: 10px;
+}
+#toolbar>span {
+  flex: 1;
+}
+#toolbar .list,
+#toolbar input {
+  border: solid 1px #c6c6c6;
+  background-color: #f3f3f3;
+  min-width: 72px;
+  height: 27px;
+  background-repeat: no-repeat;
+  background-image: url(icons/actions.png);
+  opacity: .55;
+  margin-right: -1px;
+  background-size: 24px;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+#toolbar input:last-child {
+  margin-right: 1px;
+}
+@media (max-width: 700px) {
+  #toolbar input {
+    min-width: 36px;
+  }
+  colgroup col[data-id="authors"] {
+    width: 100px;
+  }
+}
+#toolbar .list:hover,
+#toolbar input:hover {
+  opacity: 1;
+  z-index: 1;
+}
+#toolbar input[data-ocmd=archive], /* old command: in case the default action is overwritten by user */
+#toolbar input[data-cmd=archive] {
+  background-position: center -65px;
+}
+#toolbar input[data-ocmd=spam],
+#toolbar input[data-cmd=spam] {
+  background-position: center -458px;
+}
+#toolbar input[data-ocmd=trash],
+#toolbar input[data-cmd=trash] {
+  background-position: center -415px;
+}
+#toolbar input[data-ocmd=mark-as-read],
+#toolbar input[data-cmd=mark-as-read],
+#toolbar input[data-cmd=open] {
+  background-image: none;
+  font-weight: bold;
+}
+#toolbar input[data-cmd=newer] {
+  background-position: center -392px;
+}
+#toolbar input[data-cmd=older] {
+  background-position: center -271px;
+}
+#toolbar input[data-cmd=newer],
+#toolbar input[data-cmd=older] {
+  min-width: 36px;
+}
+
+body[data-selected=false] .selection {
+  opacity: 0.3 !important;
+  pointer-events: none;
+}
+
+#toolbar .list {
+  position: relative;
+  background-image: none;
+  min-width: 16px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+#toolbar .list>span {
+  background-image: url(icons/list.svg);
+  background-position: center center;
+  background-size: 16px;
+  background-repeat: no-repeat;
+
+  display: inline-block;
+  height: 100%;
+  min-width: 36px;
+
+  pointer-events: none;
+}
+#toolbar .list>label {
+  pointer-events: none;
+  margin-right: 10px;
+}
+#toolbar .list ul {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  min-width: 130px;
+  background: #fff;
+  z-index: 2;
+  border: solid 1px #cccccc;
+  list-style: none;
+  margin: 0;
+  padding: 5px 0px;
+}
+#toolbar .list[data-visible=false] ul {
+  display: none;
+}
+#toolbar .list[data-visible=true] {
+  opacity: 1;
+}
+#toolbar .list li {
+  padding: 2px 10px;
+  cursor: pointer;
+}
+#toolbar .list li:hover {
+  background: #ebebeb;
+}
+#toolbar .list li.separator {
+  border-top: solid 1px #e8e8e8;
+  pointer-events: none;
+  margin-top: 4px;
+}
+
+table {
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+#content:empty:before {
+  content: 'This list is empty!';
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+#content[data-error]:empty:before {
+  content: attr(data-error);
+  height: 42px;
+}
+#content[data-loading=true]:empty:before {
+  content: ' ';
+  background: url('images/loading.gif') center center no-repeat;
+  background-size: 32px;
+  height: 42px;
+}
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 24px;
+  padding: 0;
+}
+tr {
+  border-bottom: solid 1px #e1e1e1;
+  background-color: #f3f3f3;
+  cursor: pointer;
+  user-select: none;
+}
+tr[data-unread=true] {
+  background-color: #fff;
+  font-weight: bold;
+}
+tr[data-selected=true] {
+  background-color: #ffffc5;
+}
+tr:first-child {
+  border-top: solid 1px #e1e1e1;
+}
+td[data-id=active] input {
+  display: none;
+}
+td[data-id=active] label {
+  width: 100%;
+  height: 100%;
+}
+td[data-id=active] input:checked ~ label {
+  background-color: #5092ed;
+  display: inline-block;
+}
+td[data-id=subject]>div {
+  display: inline-block;
+}
+td div[data-id=tags] span {
+  background-color: #ddd;
+  border-color: #ddd;
+  color: #666;
+  padding: 2px 5px;
+  margin: 0 1px;
+  font-weight: normal;
+  font-size: 11px;
+}
+td div[data-id=tags] span[data-tag=replied] {
+  color: #fff;
+  background-color: #4986e7;
+}
+td div[data-id=tags] span[data-tag=attachment] {
+  color: rgb(102, 46, 55);
+  background-color: rgb(235, 219, 222);
+}
+
+td[data-id=select] {
+  padding-left: 10px;
+}
+td[data-id=select] label {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border: solid 1px #c2c2c2;
+}
+tr[data-selected=true] td[data-id=select] label {
+  background: url(icons/select.svg) center center no-repeat;
+  background-size: 20px;
+  background-position: left -3px center;
+}
+tr td[data-id="star"] {
+  background-position: center;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-image: url(icons/not-flagged.svg);
+}
+tr[data-flagged=true] td[data-id="star"] {
+  background-image: url(icons/flagged.svg);
+}
+td[data-id="date"] {
+  padding-right: 10px;
+  text-align: right;
+}
+td[data-id="authors"] {
+  padding-left: 10px;
+}
