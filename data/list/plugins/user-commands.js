@@ -1,7 +1,10 @@
 /* globals utils, config, view, args */
 'use strict';
 
-utils.storage.get(config).then(prefs => {
+utils.storage.get(null).then(prefs => {
+  prefs = Object.assign({
+    commands: []
+  }, config, prefs);
   const extra = document.getElementById('extra');
   if (prefs.commands.length) {
     const li = document.createElement('li');
@@ -9,6 +12,9 @@ utils.storage.get(config).then(prefs => {
     extra.appendChild(li);
   }
   prefs.commands.forEach(command => {
+    if (prefs[command] === undefined) {
+      return console.log(command, 'is ignored (not defined)');
+    }
     const {action, name, classList = [], alert, warn} = prefs[command];
     const exists = document.querySelector(`[data-cmd="${command}"]`);
     const li = exists ? exists : document.createElement('li');

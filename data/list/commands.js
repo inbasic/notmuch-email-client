@@ -61,11 +61,16 @@
     }
     else if (cmd === 'archive') {
       utils.storage.get(config).then(prefs => {
-        const action = prefs.archive.action
+        const action = (prefs.archive ? prefs.archive.action : '')
           .replace('[threads]', view.threads().map(id => 'thread:' + id).join(' '))
           .replace('[query]', args.query);
 
-        utils.native.exec(action).then(() => view.emit('refresh'));
+        if (action) {
+          utils.native.exec(action).then(() => view.emit('refresh'));
+        }
+        else {
+          window.alert('"action" is empty! Use the options page to fix this.');
+        }
       });
     }
   });

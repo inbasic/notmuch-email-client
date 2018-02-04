@@ -4,6 +4,7 @@
   <title>Email Client</title>
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="../medium-style-confirm/css/msc-style.css">
+  <meta charset="utf-8">
 </head>
 <body>
   <div id="sidebar">
@@ -14,7 +15,7 @@
     <iframe id="list" src="about:blank"></iframe>
   </div>
   <div id="popup" class="hide">
-    <iframe src="" sandbox="allow-scripts allow-popups"></iframe>
+    <iframe src="about:blank" sandbox="allow-scripts allow-popups allow-same-origin"></iframe>
   </div>
   <script src="/webext/utils/EventEmitter.js"></script>
   <script src="/webext/core/base.js"></script>

@@ -1,5 +1,9 @@
 'use strict';
 
+// Firefox loads old URLs!
+document.getElementById('tree').src = '';
+document.getElementById('list').src = '';
+
 chrome.runtime.sendNativeMessage('com.add0n.node', {
   cmd: 'version'
 }, r => {
