@@ -51,7 +51,7 @@ webext.runtime.on('start-up', () => {
   // FAQs
   webext.storage.get({
     'version': null,
-    'faqs': navigator.userAgent.indexOf('Firefox') === -1,
+    'faqs': false,
     'last-update': 0,
   }).then(prefs => {
     if (prefs.version ? (prefs.faqs && prefs.version !== version) : true) {

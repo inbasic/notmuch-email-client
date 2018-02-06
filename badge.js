@@ -11,7 +11,7 @@ badge.setup = () => webext.storage.get({
 }).then(prefs => {
   if (prefs.command) {
     webext.browserAction.setTitle({
-      title: `Timer in progress (synced: ${badge.sync})`
+      title: `In progress (synced: ${badge.sync})`
     });
     webext.alarms.create('periodic-job', {
       when: Date.now() + Math.max(0, prefs.delay) * 1000,
@@ -31,7 +31,6 @@ webext.alarms.on('alarm', () => webext.storage.get({
 }).then(({command}) => {
   if (command) {
     const old = badge.sync;
-    badge.sync = true; // reset sync status
     native.exec({
       action: command + ' ' + badge.sync
     }).then(r => {
@@ -42,6 +41,7 @@ webext.alarms.on('alarm', () => webext.storage.get({
         text: r.stdout.trim().substr(0, 5)
       });
     }).catch(e => console.error(e));
+    badge.sync = true; // reset sync status
   }
 })).if(({name}) => name === 'periodic-job');
 

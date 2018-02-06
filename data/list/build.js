@@ -6,7 +6,7 @@ var args = location.search.replace('?', '').split('&').reduce((p, c) => {
   p[key] = decodeURIComponent(value);
   return p;
 }, {});
-args.limit = Math.min(Math.max(2, Number(args.limit || 50)), 100);
+args.limit = Math.min(Math.max(2, Number(args.limit || 50)), 300);
 args.query = args.query || 'empty';
 args.offset = Math.max(0, Number(args.offset || 0));
 args.total = Number(args.total || 0);
