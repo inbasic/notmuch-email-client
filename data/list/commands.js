@@ -5,7 +5,8 @@
   view.threads = () => [...document.querySelectorAll('tr[data-selected="true"]')]
     .map(tr => tr.dataset.thread);
 
-  document.addEventListener('click', ({target}) => {
+  document.addEventListener('click', e => {
+    const {target} = e;
     const cmd = target.dataset.cmd;
 
     if (
@@ -72,6 +73,28 @@
           window.alert('"action" is empty! Use the options page to fix this.');
         }
       });
+    }
+    else if (cmd === 'move-to') {
+      view.browse.build();
+      target.closest('.list').dataset.visible = true;
+    }
+    else if (cmd === 'move-cancel') {
+      view.browse.destroy();
+    }
+    else if (cmd === 'move-ok') {
+      const path = view.browse.destroy();
+      if (path === undefined) {
+        return window.alert('Please select the destination directory first');
+      }
+      const query = view.threads().map(id => 'thread:' + id).join(' ') + ' ' + args.query;
+      utils.files(query).then(files => {
+        utils.native.files.move(files, path)
+          .then(() => utils.notmuch.new())
+          .then(() => view.emit('refresh')).catch(e => console.error(e));
+      });
+    }
+    else if (cmd) {
+      console.log(cmd, 'is not supported');
     }
   });
 }

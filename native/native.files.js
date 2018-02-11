@@ -33,7 +33,7 @@ native.files.list = ({root, path = ''}) => webext.runtime.connectNative(native.i
 
 native.files.move = ({files, dir}) => webext.runtime.connectNative(native.id, {
   permissions: ['fs', 'path'],
-  args: [files.map(f => f.path), dir],
+  args: [files, dir],
   script: String.raw`
     /* globals require, push, close, args */
     const fs = require('fs');

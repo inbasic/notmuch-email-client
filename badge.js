@@ -34,11 +34,16 @@ webext.alarms.on('alarm', () => webext.storage.get({
     native.exec({
       action: command + ' ' + badge.sync
     }).then(r => {
-      webext.browserAction.setTitle({
-        title: 'Last run (with synced: ' + old + ') ' + (new Date()).toLocaleString()
-      });
+      const count = r.stdout.trim().split('\n')[0].substr(0, 5);
       webext.browserAction.setBadgeText({
-        text: r.stdout.trim().substr(0, 5)
+        text: count !== '0' ? count : ''
+      });
+      const stdout = isNaN(count) ? r.stdout : r.stdout.replace(count, '');
+      const title = 'Last run (with synced: ' + old + ') ' + (new Date()).toLocaleString() + `
+
+${(stdout || r.stderr).trim()}`;
+      webext.browserAction.setTitle({
+        title
       });
     }).catch(e => console.error(e));
     badge.sync = true; // reset sync status

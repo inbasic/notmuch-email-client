@@ -1,6 +1,12 @@
 /* globals EventEmitter, VanillaTree, tree */
 'use strict';
 
+var args = location.search.replace('?', '').split('&').reduce((p, c) => {
+  const [key, value] = c.split('=');
+  p[key] = decodeURIComponent(value);
+  return p;
+}, {});
+
 var tree = new EventEmitter();
 
 {
@@ -21,6 +27,7 @@ var tree = new EventEmitter();
 
   tree.separate = s => s.split(new RegExp(tree.separate.reg));
   tree.separate.reg = '[./\\\\]';
+  tree.join = (...parts) => parts.join('/').replace(/\/\//g, '/');
 
   tree.build = files => {
     let dirs = files
@@ -46,6 +53,7 @@ var tree = new EventEmitter();
         );
         if (cache.indexOf(pid) !== -1) {
           dir.parent = pid;
+          dir.label = spl[n - 1];
         }
       }
       list[n].push(dir);

@@ -14,6 +14,32 @@ args.total = Number(args.total || 0);
 var view = new EventEmitter();
 var tbody = document.getElementById('content');
 
+view.browse = {
+  watch: ({target}) => {
+    const tree = target.contentWindow.tree;
+    tree.on('select', id => {
+      const {root, join} = tree;
+      target.dataset.path = join(root, id, 'cur');
+    });
+  },
+  build: () => {
+    const li = document.querySelector('[data-cmd="move-to"]');
+    li.dataset.active = true;
+    const iframe = li.querySelector('iframe');
+    iframe.src = '../tree/index.html?sandbox=true&plugins=false';
+    iframe.addEventListener('load', view.browse.watch);
+  },
+  destroy: () => {
+    const li = document.querySelector('[data-cmd="move-to"]');
+    const iframe = li.querySelector('iframe');
+    iframe.removeEventListener('load', view.browse.watch);
+    iframe.src = 'about:blank';
+    li.dataset.active = false;
+
+    return iframe.dataset.path;
+  }
+};
+
 view.add = entry => {
   const tr = document.getElementById('entry');
   const clone = document.importNode(tr.content, true);

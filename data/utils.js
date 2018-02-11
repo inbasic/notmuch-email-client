@@ -42,3 +42,9 @@ utils.native.exec = action => new Promise(resolve => chrome.runtime.sendMessage(
   method: 'native.exec',
   action
 }, resolve));
+utils.native.files = {};
+utils.native.files.move = (files, dir) => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'native.files.move',
+  files,
+  dir
+}, resolve));

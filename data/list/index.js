@@ -12,6 +12,10 @@ document.addEventListener('click', ({target}) => {
   const list = document.querySelector('.list[data-visible=true]');
   if (list && list !== target) {
     list.dataset.visible = false;
+    list.dispatchEvent(new CustomEvent('hidden'));
+    if (list.querySelector('[data-cmd="move-to"]')) {
+      view.browse.destroy();
+    }
   }
 });
 

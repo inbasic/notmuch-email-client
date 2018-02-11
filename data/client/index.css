@@ -8,8 +8,7 @@ body {
   height: 100%;
 }
 iframe {
-  border: solid 1px transparent;
-  box-sizing: border-box;
+  border: none;
 }
 #content {
   display: flex;
@@ -23,8 +22,6 @@ iframe {
 
   resize: horizontal;
   overflow: auto;
-
-  border-right: 1px solid #e5e5e5;
 
   padding-right: 10px;
 }

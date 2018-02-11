@@ -26,11 +26,11 @@
         <input type="button" data-cmd="archive" class="selection">
         <input type="button" data-cmd="spam" class="selection">
         <input type="button" data-cmd="trash" class="selection">
-        <input type="button" data-cmd="mark-as-read" value="Mark as read" class="selection">
+        <input type="button" data-cmd="mark-as-read" value="Mark as read" class="selection no-icon">
       </div>
 
       <div>
-        <input type="button" data-cmd="open" value="Open" class="selection">
+        <input type="button" data-cmd="open" value="Open" class="selection no-icon">
       </div>
 
       <div>
@@ -39,6 +39,17 @@
           <label>Extra</label>
           <ul id="extra">
             <li data-cmd="mark-as-unread" class="selection">Make as unread</li>
+            <li class="separator"></li>
+            <li data-cmd="move-to" class="selection" data-active=false>
+              <span>Move to a folder</span>
+              <div>
+                <iframe src="about:blank"></iframe>
+                <div>
+                  <input type="button" data-cmd="move-cancel" value="Cancel" class="no-icon">
+                  <input type="button" data-cmd="move-ok" value="Move" class="no-icon">
+                </div>
+              </div>
+            </li>
             <li class="separator"></li>
             <li data-cmd="copy-ids" class="selection">Copy selected IDs</li>
             <li data-cmd="copy-filenames" class="selection">Copy filenames</li>
@@ -96,5 +107,6 @@
     <script src="/data/utils.js"></script>
     <script async src="commands.js"></script>
     <script async src="plugins/user-commands.js"></script>
+    <!-- <script async src="plugins/async-menu.js"></script> -->
   </body>
 </html>

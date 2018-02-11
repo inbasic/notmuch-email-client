@@ -1,4 +1,4 @@
-/* globals tree, webext */
+/* globals tree, webext, args */
 'use strict';
 
 tree.allow = {};
@@ -47,4 +47,4 @@ tree.on('maildir', id => {
     total: tree.leaf(id).total
   });
   api.client.title(id);
-}).if(() => window.top !== window && tree.allow.transmit);
+}).if(() => window.top !== window && tree.allow.transmit && args.sandbox !== 'true');
