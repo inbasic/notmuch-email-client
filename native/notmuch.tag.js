@@ -33,15 +33,7 @@ native.notmuch.tag = ({threads = [], ids = [], tags, query = '', tabId}) => {
       tags.indexOf('+unread') !== -1 ||
       tags.indexOf('-unread') !== -1
     ) {
-      native.notmuch.count({
-        query
-      }).then(r => chrome.tabs.sendMessage(tabId, {
-        method: 'notmuch.count.response',
-        unread: r.unread,
-        total: r.total,
-        query
-      }));
-      webext.runtime.emit('notmuch.count.response');
+      native.policy(tabId, query);
     }
     return r;
   });

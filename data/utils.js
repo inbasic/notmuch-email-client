@@ -25,7 +25,11 @@ utils.files = query => new Promise((resolve, reject) => chrome.runtime.sendMessa
   }
 }));
 
-utils.storage = webext.storage;
+Object.defineProperty(utils, 'storage', {
+  get() {
+    return webext.storage;
+  }
+});
 
 utils.notmuch = {};
 utils.notmuch.new = query => new Promise(resolve => chrome.runtime.sendMessage({

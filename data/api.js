@@ -1,4 +1,4 @@
-/* globals EventEmitter, webext */
+/* globals EventEmitter, webext, utils */
 'use strict';
 
 var api = new EventEmitter();

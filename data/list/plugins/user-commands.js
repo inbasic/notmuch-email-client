@@ -30,7 +30,7 @@ if (args.plugins !== 'false') {
         li.dataset.ocmd = command;
       }
       else {
-        li.textContent = name;
+        li.textContent = name || 'unknown action';
         classList.forEach(c => li.classList.add(c));
         extra.appendChild(li);
       }
@@ -49,8 +49,21 @@ if (args.plugins !== 'false') {
           body: r.error.stderr
         });
       }
-      view.emit('refresh');
-      utils.notmuch.count(args.query);
+      // select all threads returned by the executable
+      if (r.code === 0) {
+        const threads = r.stdout.match(/thread:[^\s]*/g);
+        if (threads && threads.length) {
+          document.querySelector('[data-cmd="select-none"]').click();
+          threads.forEach(thread => {
+            const tr = document.querySelector(`[data-thread="${thread.replace('thread:', '')}"]`);
+            console.log(tr, thread);
+            if (tr) {
+              tr.dataset.selected = true;
+            }
+          });
+        }
+      }
+      view.emit('refresh', true);
     });
 
     if (cmd === 'user-action') {

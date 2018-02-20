@@ -29,14 +29,9 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
   }
 });
 
-// allow all modules to get count's result
+// allow all modules to get the count's result
 webext.runtime.on('message', (request, sender) => {
-  native.notmuch.count(request).then(r => chrome.tabs.sendMessage(sender.tab.id, {
-    method: 'notmuch.count.response',
-    unread: r.unread,
-    total: r.total,
-    query: request.query
-  }));
+  native.policy(sender.tab.id, request.query);
 }).if(({method}) => method === 'notmuch.count');
 
 // browser-action

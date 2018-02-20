@@ -13,6 +13,9 @@ function parse(obj, html = true, parent = document.getElementById('content'), id
         return parse(obj.content.filter(o => o['content-type'] === 'text/plain'), html, parent, id);
       }
     }
+    if (obj['content-type'] === 'multipart/signed') {
+      return obj.content.forEach(o => parse(o, html, parent, id));
+    }
     if (obj.body) {
       return parse.headers(obj).then(section => {
         parent.appendChild(section.parent);

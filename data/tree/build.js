@@ -29,7 +29,45 @@ var tree = new EventEmitter();
   tree.separate.reg = '[./\\\\]';
   tree.join = (...parts) => parts.join('/').replace(/\/\//g, '/');
 
-  tree.build = files => {
+  tree.browse = path => new Promise((resolve, reject) => {
+    // remove selection
+    tree.select(false);
+
+    const root = [];
+
+    const once = () => {
+      const id = root.shift();
+      if (id) {
+        // prevent communication until last child is ready
+        tree.allow.transmit = root.length === 0;
+
+        try {
+          tree.select(id, root.length);
+        }
+        catch (e) {
+          reject(e);
+        }
+      }
+      else {
+        tree.off('select', once);
+        resolve();
+      }
+    };
+    tree.on('select', once);
+
+    let i = 0;
+    tree.separate(path).forEach(s => {
+      i += s.length;
+      root.push(path.substr(0, i));
+      i += 1;
+    });
+    once();
+  });
+  if (args.path) {
+    tree.once('ready', () => tree.browse(args.path));
+  }
+
+  tree.build = (files, id) => {
     let dirs = files
       .filter(o => o.dir && o.name[0] !== '.')
       .filter(o => o.name !== 'cur' && o.name !== 'new' && o.name !== 'tmp');
@@ -63,8 +101,8 @@ var tree = new EventEmitter();
         v.add(dir);
       });
     });
-
-    return dirs.length;
+    const extra = (id ? v.getChildList(id).querySelectorAll('li').length : 0);
+    return dirs.length + extra;
   };
 
   chrome.runtime.sendMessage({
@@ -101,12 +139,11 @@ var tree = new EventEmitter();
         path: id
       }, r => {
         if (r.error) {
-          console.log(r);
+          console.error(r);
         }
         else {
-          const hasChild = tree.build(r.files);
+          const hasChild = tree.build(r.files, id);
           target.maildir = r.files.some(d => d.name === 'cur' || d.name === 'new' || d.name === 'tmp');
-
           if (hasChild) {
             v.open(id);
           }
@@ -140,4 +177,15 @@ var tree = new EventEmitter();
       v.select(id);
     }
   };
+
+  // toggle on "dblclick"
+  v.container.addEventListener('dblclick', ({target}) => {
+    if (target.classList.contains('vtree-leaf-label')) {
+      target = target.closest('li');
+      if (target.populated) {
+        const id = target.dataset.vtreeId;
+        v.toggle(id);
+      }
+    }
+  });
 }

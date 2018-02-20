@@ -1,4 +1,4 @@
-/* globals EventEmitter, webext */
+/* globals EventEmitter, webext, utils */
 'use strict';
 
 var args = location.search.replace('?', '').split('&').reduce((p, c) => {
@@ -75,7 +75,7 @@ view.update = (entry, parent) => {
     entries.forEach(view.add);
     newer.start = start + entries.length;
     older.start = start - args.limit;
-    older.disabled = start === 0;
+    older.disabled = older.start < 0;
     document.getElementById('start').textContent = start + 1;
     document.getElementById('end').textContent = newer.start;
     view.emit('update-toolbar');
@@ -115,7 +115,7 @@ view.on('search', ({start}) => {
   });
 });
 
-view.on('refresh', () => chrome.runtime.sendMessage(Object.assign({
+view.on('refresh', (count = false) => chrome.runtime.sendMessage(Object.assign({
   method: 'notmuch.search'
 }, args), r => {
   if (r.error) {
@@ -140,11 +140,17 @@ view.on('refresh', () => chrome.runtime.sendMessage(Object.assign({
     // update "end"'s label
     document.getElementById('end').textContent = args.offset + r.responses.length;
     // update toolbar
-    view.emit('update-toolbar');
+    if (count) {
+      utils.notmuch.count(args.query).then(() => view.emit('update-toolbar'));
+    }
+    else {
+      view.emit('update-toolbar');
+    }
   }
 }));
 
 {
+  const older = document.querySelector('[data-cmd="older"]');
   const newer = document.querySelector('[data-cmd="newer"]');
   view.on('update-toolbar', () => {
     // update the "newer" button
@@ -154,6 +160,7 @@ view.on('refresh', () => chrome.runtime.sendMessage(Object.assign({
     else {
       newer.disabled = true;
     }
+    older.disabled = older.start < 0;
     // update commands
     document.body.dataset.selected = document.querySelector('#root [data-selected=true]') !== null;
     // update total count

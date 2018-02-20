@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.1.4",
+  "version": "0.1.9",
   "name": "Email Client - Notmuch",
   "description": "an email client based on notmuch offline email indexing tool",
 
@@ -45,6 +45,7 @@
       "native/base.js",
       "native/native.exec.js",
       "native/native.files.js",
+      "native/native.policy.js",
       "native/notmuch.tag.js",
       "native/notmuch.new.js",
       "native/notmuch.search.js",

@@ -14,7 +14,6 @@ document.getElementById('save').addEventListener('click', () => {
   let delay = 750;
   try {
     const json = JSON.parse(document.getElementById('json').value);
-    console.log(json);
     webext.storage.set(json);
     info.textContent = 'Options saved';
   }

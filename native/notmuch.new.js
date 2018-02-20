@@ -17,14 +17,7 @@ native.notmuch.new = ({query = '', tabId}) => webext.runtime.connectNative(nativ
   `
 }).build().then(r => {
   if (r.code === 0) {
-    native.notmuch.count({
-      query
-    }).then(r => chrome.tabs.sendMessage(tabId, {
-      method: 'notmuch.count.response',
-      unread: r.unread,
-      total: r.total,
-      query
-    }));
+    native.policy(tabId, query);
   }
   return r;
 });

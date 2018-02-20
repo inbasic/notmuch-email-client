@@ -25,7 +25,6 @@ badge.setup = () => webext.storage.get({
     webext.alarms.clear('periodic-job');
   }
 });
-
 webext.alarms.on('alarm', () => webext.storage.get({
   command: ''
 }).then(({command}) => {
@@ -41,9 +40,9 @@ webext.alarms.on('alarm', () => webext.storage.get({
       const stdout = isNaN(count) ? r.stdout : r.stdout.replace(count, '');
       const title = 'Last run (with synced: ' + old + ') ' + (new Date()).toLocaleString() + `
 
-${(stdout || r.stderr).trim()}`;
+${(stdout || r.stderr)}`;
       webext.browserAction.setTitle({
-        title
+        title: title.trim()
       });
     }).catch(e => console.error(e));
     badge.sync = true; // reset sync status

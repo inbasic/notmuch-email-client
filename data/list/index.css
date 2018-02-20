@@ -99,8 +99,9 @@ body {
   text-align: right;
   padding: 5px 0;
 }
+#toolbar [data-cmd="move-to"][data-active=true]:hover,
 #toolbar [data-cmd="move-to"][data-active=true] {
-  background-color: #f1f1f1;
+  background-color: #fff;
 }
 #toolbar [data-cmd="move-to"][data-active=true]>span {
   display: none;
@@ -109,6 +110,7 @@ body {
   display: none;
 }
 
+#toolbar input:disabled,
 body[data-selected=false] .selection {
   opacity: 0.3 !important;
   pointer-events: none;

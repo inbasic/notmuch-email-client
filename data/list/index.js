@@ -37,29 +37,3 @@ document.getElementById('root').addEventListener('click', e => {
     view.emit('update-toolbar');
   }
 });
-
-// commands
-document.getElementById('toolbar').addEventListener('click', ({target}) => {
-  const cmd = target.dataset.cmd;
-  if (cmd && cmd.startsWith('select-')) {
-    [...document.querySelectorAll('#root tr')].forEach(tr => tr.dataset.selected = false);
-  }
-  if (cmd === 'select-all') {
-    [...document.querySelectorAll('#root tr')].forEach(tr => tr.dataset.selected = true);
-  }
-  else if (cmd === 'select-read') {
-    [...document.querySelectorAll('#root tr[data-unread="false"]')].forEach(tr => tr.dataset.selected = true);
-  }
-  else if (cmd === 'select-unread') {
-    [...document.querySelectorAll('#root tr[data-unread="true"]')].forEach(tr => tr.dataset.selected = true);
-  }
-  else if (cmd === 'select-starred') {
-    [...document.querySelectorAll('#root tr[data-flagged="true"]')].forEach(tr => tr.dataset.selected = true);
-  }
-  else if (cmd === 'select-unstarred') {
-    [...document.querySelectorAll('#root tr[data-flagged="false"]')].forEach(tr => tr.dataset.selected = true);
-  }
-  if (cmd && cmd.startsWith('select-')) {
-    view.emit('update-toolbar');
-  }
-});
