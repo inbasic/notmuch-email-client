@@ -10,11 +10,20 @@
     }
     textarea {
       width: 100%;
+      margin: 3px 0 10px 0;
     }
   </style>
   <body>
-    <textarea rows="20" id="json"></textarea>
-    <p>Use <a href="https://jsonformatter.org/json-editor">a JSON editor</a> to edit this file</p>
+    Configurations (Use <a href="https://jsonformatter.org/json-editor">a JSON editor</a> to edit this section):
+    <textarea rows="10" id="json"></textarea>
+    List-view styling:
+    <textarea rows="2" id="list-css" placeholder="user-styles for list-view"></textarea>
+    Tree-view styling:
+    <textarea rows="2" id="tree-css" placeholder="user-styles for tree-view"></textarea>
+    Search-view styling:
+    <textarea rows="2" id="search-css" placeholder="user-styles for search-view"></textarea>
+    Client-view styling:
+    <textarea rows="2" id="client-css" placeholder="user-styles for client-view"></textarea>
     <p>
       <input type="button" value="Save" id="save">
       <span id="info"></span>

@@ -1,6 +1,16 @@
 /* globals view */
 'use strict';
 
+// apply user-styles
+{
+  const textContent = localStorage.getItem('list-css');
+  if (textContent) {
+    document.documentElement.appendChild(Object.assign(document.createElement('style'), {
+      textContent
+    }));
+  }
+}
+
 // menu open and close
 document.getElementById('toolbar').addEventListener('click', e => {
   const target = e.target;

@@ -1,5 +1,15 @@
 'use strict';
 
+// apply user-styles
+{
+  const textContent = localStorage.getItem('client-css');
+  if (textContent) {
+    document.documentElement.appendChild(Object.assign(document.createElement('style'), {
+      textContent
+    }));
+  }
+}
+
 // Firefox loads old URLs!
 document.getElementById('tree').src = '';
 document.getElementById('list').src = '';
