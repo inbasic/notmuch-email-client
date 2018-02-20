@@ -183,6 +183,10 @@ body[data-selected=false] .selection {
   background: url(images/sl.gif) center right no-repeat;
 }
 
+#toolbar #stat {
+  white-space: nowrap;
+}
+
 table {
   table-layout: fixed;
   border-collapse: collapse;

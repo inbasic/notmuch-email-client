@@ -56,7 +56,6 @@ if (args.plugins !== 'false') {
           document.querySelector('[data-cmd="select-none"]').click();
           threads.forEach(thread => {
             const tr = document.querySelector(`[data-thread="${thread.replace('thread:', '')}"]`);
-            console.log(tr, thread);
             if (tr) {
               tr.dataset.selected = true;
             }
@@ -67,29 +66,33 @@ if (args.plugins !== 'false') {
     });
 
     if (cmd === 'user-action') {
-      action = action
-        .replace('[threads]', view.threads().map(id => 'thread:' + id).join(' '))
-        .replace('[query]', args.query);
+      const threads = view.threads().map(id => 'thread:' + id).join(' ');
+      (threads.length ? utils.files(threads) : Promise.resolve([])).then(files => {
+        action = action
+          .replace('[threads]', threads)
+          .replace('[query]', args.query)
+          .replace('[files]', files.join('\n'));
 
-      if (action) {
-        if (warn) {
-          if (window.top === window) {
-            console.log('this action is only available in the client mode');
+        if (action) {
+          if (warn) {
+            if (window.top === window) {
+              console.log('this action is only available in the client mode');
+            }
+            else {
+              window.top.api.user.confirm({
+                title: 'Confirm',
+                body: warn
+              }).then(perform);
+            }
           }
           else {
-            window.top.api.user.confirm({
-              title: 'Confirm',
-              body: warn
-            }).then(perform);
+            perform();
           }
         }
         else {
-          perform();
+          window.alert('"action" is empty! Use the options page to fix this.');
         }
-      }
-      else {
-        window.alert('"action" is empty! Use the options page to fix this.');
-      }
+      })
     }
   });
 }

@@ -45,5 +45,6 @@ document.getElementById('root').addEventListener('click', e => {
   else if (tr && e.isTrusted) {
     tr.dataset.selected = tr.dataset.selected !== 'true';
     view.emit('update-toolbar');
+    view.emit('selection-changed');
   }
 });

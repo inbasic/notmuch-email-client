@@ -95,7 +95,6 @@ document.addEventListener('click', e => {
   }
 });
 
-
 // commands
 document.getElementById('toolbar').addEventListener('click', ({target}) => {
   const cmd = target.dataset.cmd;
@@ -119,6 +118,11 @@ document.getElementById('toolbar').addEventListener('click', ({target}) => {
   }
   if (cmd && cmd.startsWith('select-')) {
     view.emit('update-toolbar');
+    view.emit('selection-changed');
   }
 });
 
+view.on('selection-changed', () => {
+  const count = document.querySelectorAll('#root [data-selected=true]').length;
+  document.getElementById('selected').textContent = count ? `(${count})` : '';
+});
