@@ -93,6 +93,24 @@ document.addEventListener('click', e => {
         .then(() => view.emit('refresh', true)).catch(e => console.error(e));
     });
   }
+  else if (cmd === 'remove-tag') {
+    e.preventDefault();
+    const tag = target.closest('div').dataset.tag;
+    const thread = target.closest('tr').dataset.thread;
+    if (tag && thread) {
+      console.log(tag, thread);
+      chrome.runtime.sendMessage({
+        method: 'notmuch.tag',
+        threads: [thread],
+        tags: ['-' + tag]
+      }, response => {
+        console.log(response);
+        if (response.error === undefined) {
+          view.emit('refresh');
+        }
+      });
+    }
+  }
 });
 
 // commands

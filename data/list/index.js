@@ -42,9 +42,14 @@ document.getElementById('root').addEventListener('click', e => {
   if (cmd === 'toggle-flag') {
     tr.dataset.flagged = tr.dataset.flagged !== 'true';
   }
+  // do with a delay
   else if (tr && e.isTrusted) {
-    tr.dataset.selected = tr.dataset.selected !== 'true';
-    view.emit('update-toolbar');
-    view.emit('selection-changed');
+    window.setTimeout(() => {
+      if (e.defaultPrevented === false) {
+        tr.dataset.selected = tr.dataset.selected !== 'true';
+        view.emit('update-toolbar');
+        view.emit('selection-changed');
+      }
+    }, 50);
   }
 });

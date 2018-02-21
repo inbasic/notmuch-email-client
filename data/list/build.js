@@ -59,10 +59,11 @@ view.update = (entry, parent) => {
   parent.querySelector('[data-id="date"]').textContent = entry['date_relative'];
   parent.querySelector('[data-id="tags"]').textContent = '';
   entry.tags.filter(t => t !== 'new' && t !== 'unread' && t !== 'flagged').forEach(tag => {
-    const span = document.createElement('span');
-    span.textContent = tag;
-    span.dataset.tag = tag;
-    parent.querySelector('[data-id="tags"]').appendChild(span);
+    const t = document.getElementById('tag');
+    const clone = document.importNode(t.content, true);
+    clone.querySelector('span').textContent = tag;
+    clone.querySelector('div').dataset.tag = tag;
+    parent.querySelector('[data-id="tags"]').appendChild(clone);
   });
 };
 

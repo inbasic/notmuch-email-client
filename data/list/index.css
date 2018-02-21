@@ -244,22 +244,35 @@ td[data-id=active] input:checked ~ label {
 td[data-id=subject]>div {
   display: inline-block;
 }
-td div[data-id=tags] span {
+td div[data-id=tags] {
+  display: inline-flex;
+}
+td div[data-id=tags]>div {
+  display: flex;
   background-color: #ddd;
   border-color: #ddd;
   color: #666;
-  padding: 2px 5px;
-  margin: 0 1px;
   font-weight: normal;
   font-size: 11px;
+  margin: 0 1px;
+  position: relative;
 }
-td div[data-id=tags] span[data-tag=replied] {
+td div[data-id=tags] span {
+  padding: 2px 5px;
+}
+td div[data-id=tags] span:last-child {
+  position: absolute;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
-  background-color: #4986e7;
 }
-td div[data-id=tags] span[data-tag=attachment] {
-  color: rgb(102, 46, 55);
-  background-color: rgb(235, 219, 222);
+td div[data-id=tags] div:not(:hover) span:last-child {
+  display: none;
+}
+/* do not display close button for these tags */
+td div[data-id=tags] [data-tag=replied] span:last-child,
+td div[data-id=tags] [data-tag=attachment] span:last-child {
+  display: none;
 }
 
 td[data-id=select] {
