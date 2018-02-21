@@ -11,6 +11,14 @@ args.query = args.query || 'empty';
 args.offset = Math.max(0, Number(args.offset || 0));
 args.total = Number(args.total || 0);
 
+// make sure the count is called, otherwise call it
+var doCount;
+if (args.total === 0 && args.query !== 'empty') {
+  doCount = window.setTimeout(() => {
+    utils.notmuch.count(args.query);
+  }, 2000);
+}
+
 var view = new EventEmitter();
 var tbody = document.getElementById('content');
 
@@ -166,10 +174,13 @@ view.on('refresh', (count = false) => chrome.runtime.sendMessage(Object.assign({
     document.body.dataset.selected = document.querySelector('#root [data-selected=true]') !== null;
     // update total count
     document.getElementById('total').textContent = args.total;
+    // selection-changed
+    view.emit('selection-changed');
   });
 }
 
 webext.runtime.on('message', ({total}) => {
   args.total = total;
   view.emit('update-toolbar');
+  window.clearTimeout(doCount);
 }).if(request => request.error === undefined && request.method === 'notmuch.count.response' && request.query === args.query);

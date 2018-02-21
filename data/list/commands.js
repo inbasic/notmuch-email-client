@@ -104,12 +104,14 @@ document.addEventListener('click', e => {
         threads: [thread],
         tags: ['-' + tag]
       }, response => {
-        console.log(response);
         if (response.error === undefined) {
           view.emit('refresh');
         }
       });
     }
+  }
+  else if (cmd === 'refresh') {
+    location.reload();
   }
 });
 
@@ -136,7 +138,6 @@ document.getElementById('toolbar').addEventListener('click', ({target}) => {
   }
   if (cmd && cmd.startsWith('select-')) {
     view.emit('update-toolbar');
-    view.emit('selection-changed');
   }
 });
 

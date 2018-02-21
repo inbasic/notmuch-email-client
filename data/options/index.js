@@ -12,6 +12,7 @@ document.getElementById('list-css').value = localStorage.getItem('list-css') || 
 document.getElementById('tree-css').value = localStorage.getItem('tree-css') || '';
 document.getElementById('search-css').value = localStorage.getItem('search-css') || '';
 document.getElementById('client-css').value = localStorage.getItem('client-css') || '';
+document.getElementById('show-css').value = localStorage.getItem('show-css') || '';
 
 document.getElementById('save').addEventListener('click', () => {
   const info = document.getElementById('info');
@@ -30,6 +31,7 @@ document.getElementById('save').addEventListener('click', () => {
   localStorage.setItem('tree-css', document.getElementById('tree-css').value);
   localStorage.setItem('search-css', document.getElementById('search-css').value);
   localStorage.setItem('client-css', document.getElementById('client-css').value);
+  localStorage.setItem('show-css', document.getElementById('show-css').value);
 
   window.setTimeout(() => info.textContent = '', delay);
 });

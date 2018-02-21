@@ -47,7 +47,7 @@ body {
 #toolbar input:last-child {
   margin-right: 1px;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   #toolbar input {
     min-width: 36px;
   }
@@ -108,6 +108,9 @@ body {
 }
 #toolbar [data-cmd="move-to"][data-active=false]>div {
   display: none;
+}
+#toolbar input[data-cmd=refresh] {
+  background-position: center -23px;
 }
 
 #toolbar input:disabled,

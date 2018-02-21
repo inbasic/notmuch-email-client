@@ -1,6 +1,16 @@
 /* globals parse */
 'use strict';
 
+// apply user-styles
+{
+  const textContent = localStorage.getItem('show-css');
+  if (textContent) {
+    document.documentElement.appendChild(Object.assign(document.createElement('style'), {
+      textContent
+    }));
+  }
+}
+
 var args = location.search.replace('?', '').split('&').reduce((p, c) => {
   const [key, value] = c.split('=');
   p[key] = decodeURIComponent(value);
