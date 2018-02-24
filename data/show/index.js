@@ -35,3 +35,22 @@ if (args.query) {
 else {
   document.body.textContent = 'No query!';
 }
+
+var get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'notmuch.show',
+  query: 'id:' + id,
+  part: obj.id,
+  format: 'raw',
+  html: false
+}, resolve));
+
+document.addEventListener('click', ({target}) => {
+  const cmd = target.dataset.cmd;
+
+  if (cmd === 'attachment') {
+    get(target.dataset.id, target.obj).then(url => chrome.downloads.download({
+      url,
+      filename: target.obj.filename
+    }));
+  }
+});

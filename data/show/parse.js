@@ -1,16 +1,20 @@
+/* globals get */
 'use strict';
 
-function parse(obj, html = true, parent = document.getElementById('content'), id = null) {
+function parse(obj, html = true, parent = document.getElementById('content'), attachments = null, id = null) {
   if (Array.isArray(obj)) {
-    return obj.filter(o => o).reverse().map(o => parse(o, html, parent, id));
+    return obj.filter(o => o).reverse().map(o => parse(o, html, parent, attachments, id));
   }
   else {
+    if (obj['content,']) { // bug in notmuch parser
+      obj.content = obj['content,'];
+    }
     if (obj['content-type'] === 'multipart/alternative' && obj.content.length === 2) {
       if (html) {
-        return parse(obj.content.filter(o => o['content-type'] !== 'text/plain'), html, parent, id);
+        return parse(obj.content.filter(o => o['content-type'] !== 'text/plain'), html, parent, attachments, id);
       }
       else {
-        return parse(obj.content.filter(o => o['content-type'] === 'text/plain'), html, parent, id);
+        return parse(obj.content.filter(o => o['content-type'] === 'text/plain'), html, parent, attachments, id);
       }
     }
     if (obj['content-type'] === 'multipart/signed') {
@@ -19,7 +23,7 @@ function parse(obj, html = true, parent = document.getElementById('content'), id
     if (obj.body) {
       return parse.headers(obj).then(section => {
         parent.appendChild(section.parent);
-        parse(obj.body, html, section.body, obj.id);
+        parse(obj.body, html, section.body, section.attachments, obj.id);
       });
     }
     else if (obj.content) {
@@ -35,7 +39,7 @@ function parse(obj, html = true, parent = document.getElementById('content'), id
           img.dataset.src = img.src;
           img.src = '';
         });
-        parse.images(doc.images.length);
+        parse.images([...doc.images]);
         [...doc.childNodes].filter(node => node.nodeType !== 10)
           .forEach(node => parent.appendChild(node));
       }
@@ -43,14 +47,14 @@ function parse(obj, html = true, parent = document.getElementById('content'), id
         obj['content-type'] === 'multipart/mixed' ||
         obj['content-type'] === 'multipart/related'
       ) {
-        parse(obj.content, html, parent, id);
+        parse(obj.content, html, parent, attachments, id);
       }
       else {
         console.error('missed section!', obj);
       }
     }
     else {
-      parse.attachment(obj, id);
+      parse.attachment(obj, id, attachments);
     }
   }
 }
@@ -71,8 +75,51 @@ parse.headers = obj => {
 
   const body = document.createElement('div');
   body.classList.add('body');
+
   parent.appendChild(body);
-  return Promise.resolve({parent, body});
+  return Promise.resolve({
+    parent,
+    body,
+    attachments: parent.querySelector('[data-id=attachments]')
+  });
 };
-parse.attachment = () => {};
-parse.images = () => {};
+
+function humanFileSize(bytes) {
+  const thresh = 1024;
+  if (Math.abs(bytes) < thresh) {
+    return bytes + ' B';
+  }
+  const units = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  let u = -1;
+  do {
+    bytes /= thresh;
+    u += 1;
+  }
+  while (Math.abs(bytes) >= thresh && u < units.length - 1);
+
+  return bytes.toFixed(1) + ' ' + units[u];
+}
+
+{
+  const cache = {};
+
+  parse.attachment = (obj, id, parent) => {
+    const span = document.createElement('span');
+    span.obj = obj;
+    span.href = '#';
+    span.dataset.id = id;
+    span.dataset.cmd = 'attachment';
+    span.textContent = `${obj.filename} (${humanFileSize(obj['content-length'])})`;
+    parent.appendChild(span);
+    if (obj['content-id']) {
+      cache[obj['content-id']] = {obj, id};
+    }
+  };
+  parse.images = imgs => {
+    imgs.filter(i => i.dataset.src.startsWith('cid:')).forEach(img => {
+      const id = img.dataset.src.replace('cid:', '');
+      get(cache[id].id, cache[id].obj).then(src => img.src = src);
+      delete img.dataset.src;
+    });
+  };
+}

@@ -1,7 +1,13 @@
+html,
+body {
+  height: 100%;
+}
 body {
   background-color: #fff;
   font-size: 13px;
   margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 body,
 pre {
@@ -38,29 +44,20 @@ pre {
 }
 #content {
   overflow: auto;
-}
-#attachments {
-  background-color: #efefef;
-  border-top: solid 1px #e1e1e1;
-  height: 28px;
-  padding: 0 10px;
-}
-#attachments label {
-  border-right: solid 1px rgba(0, 0, 0, 0.1);
-  padding-right: 5px;
-  margin-right: 5px;
-}
-#attachments a {
-  text-decoration: none;
-  color: #000;
-  cursor: pointer;
+  flex: 1;
 }
 
 [data-id="id"] {
   padding-right: 10px;
   text-align: left;
 }
-
+[data-id=attachments] span {
+  cursor: pointer;
+  font-weight: bold;
+}
+[data-id=attachments] span:not(:last-child):after {
+  content: ', ';
+}
 /* email related */
 td,
 table {
@@ -75,7 +72,6 @@ blockquote {
   padding: 0 5px;
   color: #6a737d;
   border-left: 2px solid #dfe2e5;
-  opacity: 0.9;
 }
 
 .PlainText {
