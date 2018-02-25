@@ -6,9 +6,6 @@ function parse(obj, html = true, parent = document.getElementById('content'), at
     return obj.filter(o => o).reverse().map(o => parse(o, html, parent, attachments, id));
   }
   else {
-    if (obj['content,']) { // bug in notmuch parser
-      obj.content = obj['content,'];
-    }
     if (obj['content-type'] === 'multipart/alternative' && obj.content.length === 2) {
       if (html) {
         return parse(obj.content.filter(o => o['content-type'] !== 'text/plain'), html, parent, attachments, id);

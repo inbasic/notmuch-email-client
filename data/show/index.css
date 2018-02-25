@@ -31,7 +31,7 @@ pre {
 .headers td:first-child {
   width: 10px;
   white-space: nowrap;
-  padding-right: 10px;
+  padding: 0 10px;
   text-align: right;
   font-weight: bold;
   color: #a1a1a1;
@@ -45,6 +45,9 @@ pre {
 #content {
   overflow: auto;
   flex: 1;
+}
+body[data-loading=true] {
+  background: #fff url('/data/images/sl.gif') center center no-repeat;
 }
 
 [data-id="id"] {

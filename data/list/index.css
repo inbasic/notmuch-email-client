@@ -183,7 +183,7 @@ body[data-selected=false] .selection {
   top: -20px;
 }
 #toolbar li[data-type=menu][data-loading=true] {
-  background: url(images/sl.gif) center right no-repeat;
+  background: url('/data/images/sl.gif') center right no-repeat;
 }
 
 #toolbar #stat {
@@ -206,7 +206,7 @@ table {
 }
 #content[data-loading=true]:empty:before {
   content: ' ';
-  background: url('images/sl.gif') center center no-repeat;
+  background: url('/data/images/sl.gif') center center no-repeat;
   background-size: 32px;
   height: 42px;
 }

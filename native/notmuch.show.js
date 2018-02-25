@@ -38,10 +38,10 @@ native.notmuch.show = ({
 
     const notmuch = require('child_process').spawn(command, params);
     notmuch.stdout.on('data', stdout => push({
-      stdout: format === 'json' ? stdout + '' : stdout
+      stdout: format === 'json' ? String(stdout) : stdout
     }));
     notmuch.stderr.on('data', stderr => push({
-      stderr: format === 'json' ? stderr + '' : stderr
+      stderr: format === 'json' ? String(stderr) : stderr
     }));
     notmuch.on('close', code => {
       push({
@@ -52,8 +52,10 @@ native.notmuch.show = ({
   `
 }).build().then(r => {
   if (format === 'json') {
+    const content = r.responses.map(o => o.stdout).join('');
+
     return {
-      content: JSON.parse(r.responses.map(o => o.stdout).join())
+      content: JSON.parse(content)
     };
   }
   const bytes = new Uint8Array([].concat.apply([], r.responses.map(({stdout}) => stdout.data)));

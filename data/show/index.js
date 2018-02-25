@@ -25,6 +25,7 @@ if (args.query) {
   }, r => {
     try {
       parse(r.content);
+      document.body.dataset.loading = false;
     }
     catch (e) {
       console.log(e);
