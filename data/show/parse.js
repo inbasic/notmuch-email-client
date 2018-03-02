@@ -99,6 +99,7 @@ function humanFileSize(bytes) {
 
 {
   const cache = {};
+  const postponed = {};
 
   parse.attachment = (obj, id, parent) => {
     const span = document.createElement('span');
@@ -108,14 +109,27 @@ function humanFileSize(bytes) {
     span.dataset.cmd = 'attachment';
     span.textContent = `${obj.filename} (${humanFileSize(obj['content-length'])})`;
     parent.appendChild(span);
-    if (obj['content-id']) {
-      cache[obj['content-id']] = {obj, id};
+    const cid = obj['content-id'];
+    if (cid) {
+      cache[cid] = {obj, id};
+      if (postponed[cid]) {
+        get(id, obj).then(src => {
+          postponed[cid].forEach(img => img.src = src);
+          delete postponed[id];
+        });
+      }
     }
   };
   parse.images = imgs => {
     imgs.filter(i => i.dataset.src.startsWith('cid:')).forEach(img => {
       const id = img.dataset.src.replace('cid:', '');
-      get(cache[id].id, cache[id].obj).then(src => img.src = src);
+      if (cache[id]) {
+        get(cache[id].id, cache[id].obj).then(src => img.src = src);
+      }
+      else {
+        postponed[id] = postponed[id] || [];
+        postponed[id].push(img);
+      }
       delete img.dataset.src;
     });
   };

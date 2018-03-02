@@ -10,6 +10,7 @@
     "tabs",
     "storage",
     "contextMenus",
+    "notifications",
     "alarms",
     "idle",
     "clipboardWrite",
@@ -41,8 +42,10 @@
       "webext/core/chrome.runtime.js",
       "webext/core/chrome.browserAction.js",
       "webext/core/chrome.contextMenus.js",
+      "webext/core/chrome.notifications.js",
       "webext/core/chrome.alarms.js",
       "webext/core/chrome.tabs.js",
+      "webext/core/chrome.idle.js",
       "native/base.js",
       "native/native.exec.js",
       "native/native.files.js",
@@ -55,6 +58,7 @@
       "native/notmuch.show.js",
       "background.js",
       "badge.js",
+      "notification.js",
       "context.js"
     ]
   },

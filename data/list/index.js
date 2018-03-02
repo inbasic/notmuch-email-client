@@ -58,6 +58,7 @@ document.getElementById('root').addEventListener('click', e => {
     if (window.top !== window) {
       window.top.api.popup.show('../show/index.html?query=thread:' + thread);
       tr.dataset.selected = true;
+      view.emit('update-toolbar');
     }
   }
 });

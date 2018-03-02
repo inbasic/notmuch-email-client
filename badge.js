@@ -1,9 +1,9 @@
-/* globals webext, native */
+/* globals webext, native, EventEmitter */
 'use strict';
 
-var badge = {
-  sync: true // pass true to the external executable to ask for server sync
-};
+var badge = new EventEmitter();
+badge.sync = true; // pass true to the external executable to ask for server sync
+
 badge.setup = () => webext.storage.get({
   delay: 2, // seconds
   interval: 5, // minutes
@@ -44,12 +44,19 @@ ${(stdout || r.stderr)}`;
       webext.browserAction.setTitle({
         title: title.trim()
       });
+      if (isNaN(count) === false) {
+        badge.emit('count', {
+          stdout,
+          count
+        });
+      }
     }).catch(e => console.error(e));
     badge.sync = true; // reset sync status
   }
 })).if(({name}) => name === 'periodic-job');
 
 webext.runtime.on('start-up', badge.setup);
+webext.idle.on('changed', badge.setup).if(s => s === 'active');
 webext.runtime.on('notmuch.count.response', () => {
   badge.sync = false;
   badge.setup();

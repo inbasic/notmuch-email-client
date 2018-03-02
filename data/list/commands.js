@@ -98,7 +98,6 @@ document.addEventListener('click', e => {
     const tag = target.closest('div').dataset.tag;
     const thread = target.closest('tr').dataset.thread;
     if (tag && thread) {
-      console.log(tag, thread);
       chrome.runtime.sendMessage({
         method: 'notmuch.tag',
         threads: [thread],
