@@ -4,7 +4,7 @@
 view.threads = () => [...document.querySelectorAll('tr[data-selected="true"]')]
   .map(tr => tr.dataset.thread);
 
-document.addEventListener('click', e => {
+document.addEventListener('click', async e => {
   const {target} = e;
   const cmd = target.dataset.cmd;
 
@@ -12,6 +12,7 @@ document.addEventListener('click', e => {
     cmd === 'mark-as-read' ||
     cmd === 'mark-as-unread' ||
     cmd === 'toggle-flag' ||
+    cmd === 'add-tags' ||
     cmd === 'trash' ||
     cmd === 'spam'
   ) {
@@ -26,6 +27,16 @@ document.addEventListener('click', e => {
     }
     else if (cmd === 'mark-as-unread') {
       options.tags.push('+unread');
+    }
+    else if (cmd === 'add-tags') {
+      const tags = await window.top.api.user.prompt({
+        title: 'Tags',
+        body: 'comma-separated list of new tags'
+      });
+      if (!tags) {
+        return;
+      }
+      options.tags.push(...tags.split(/\s*,\s*/).map(s => '+' + s));
     }
     else if (cmd === 'trash') {
       options.tags.push('+deleted');

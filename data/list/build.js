@@ -66,13 +66,16 @@ view.update = (entry, parent) => {
   parent.querySelector('[data-id="subject"]').title = entry.subject;
   parent.querySelector('[data-id="date"]').textContent = entry['date_relative'];
   parent.querySelector('[data-id="tags"]').textContent = '';
-  entry.tags.filter(t => t !== 'new' && t !== 'unread' && t !== 'flagged').forEach(tag => {
+  entry.tags
+  .filter(t => t !== 'new' && t !== 'unread' && t !== 'flagged')
+  .forEach(tag => {
     const t = document.getElementById('tag');
     const clone = document.importNode(t.content, true);
     clone.querySelector('span').textContent = tag;
     clone.querySelector('div').dataset.tag = tag;
     parent.querySelector('[data-id="tags"]').appendChild(clone);
   });
+  parent.dataset.tags = entry.tags.join(',');
 };
 
 {
@@ -81,7 +84,10 @@ view.update = (entry, parent) => {
 
   view.show = ({entries, start}) => {
     tbody.dataset.loading = false;
-    entries.forEach(view.add);
+
+    entries.sort((a, b) => { // inset flagged first
+      return b.tags.indexOf('flagged') - a.tags.indexOf('flagged');
+    }).forEach(view.add);
     newer.start = start + entries.length;
     older.start = start - args.limit;
     older.disabled = older.start < 0;

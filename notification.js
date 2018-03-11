@@ -4,7 +4,7 @@
 var notification = new EventEmitter();
 
 badge.on('count', ({stdout}) => {
-  const threads = stdout.match(/thread:[^\s]*/g).map(t => t.replace('thread:', ''));
+  const threads = (stdout.match(/thread:[^\s]*/g) || []).map(t => t.replace('thread:', ''));
   const key = threads.join(',');
   if (key !== localStorage.getItem('new-mail-id')) {
     const ots = (localStorage.getItem('new-mail-id') || '').split(',');

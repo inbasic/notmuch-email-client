@@ -12,6 +12,7 @@ api.e = {
 api.user = {};
 api.user.alert = ({title, body}) => window.mscAlert(title, body);
 api.user.confirm = ({title, body}) => new Promise(resolve => window.mscConfirm(title, body, resolve));
+api.user.prompt = ({title, body}) => new Promise(resolve => window.mscPrompt(title, body, resolve));
 
 /* search view */
 api.search = {};
