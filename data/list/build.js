@@ -6,7 +6,7 @@ var args = location.search.replace('?', '').split('&').reduce((p, c) => {
   p[key] = decodeURIComponent(value);
   return p;
 }, {});
-args.limit = Math.min(Math.max(2, Number(args.limit || 50)), 300);
+args.limit = Math.max(2, Number(args.limit || 50));
 args.query = args.query || 'empty';
 args.offset = Math.max(0, Number(args.offset || 0));
 args.total = Number(args.total || 0);
@@ -59,6 +59,7 @@ view.update = (entry, parent) => {
   parent.dataset.unread = entry.tags.indexOf('unread') !== -1;
   parent.dataset.thread = entry.thread;
   parent.dataset.flagged = entry.tags.indexOf('flagged') !== -1;
+  parent.dataset.query = entry.query.filter(a => a).join(',');
   const authors = parent.querySelector('[data-id="authors"]');
   authors.title = authors.textContent = entry.authors;
   parent.querySelector('[data-id="stat"]').textContent = entry.matched + '/' + entry.total;
@@ -86,7 +87,19 @@ view.update = (entry, parent) => {
     tbody.dataset.loading = false;
 
     entries.sort((a, b) => { // inset flagged first
-      return b.tags.indexOf('flagged') - a.tags.indexOf('flagged');
+      const af = a.tags.indexOf('flagged') !== -1;
+      const bf = b.tags.indexOf('flagged') !== -1;
+
+      if (bf && af) {
+        return b.timestamp - a.timestamp;
+      }
+      else if (bf) {
+        return +1;
+      }
+      else if (af) {
+        return -1;
+      }
+      return b.timestamp - a.timestamp;
     }).forEach(view.add);
     newer.start = start + entries.length;
     older.start = start - args.limit;
@@ -177,7 +190,9 @@ view.on('refresh', (count = false) => chrome.runtime.sendMessage(Object.assign({
     }
     older.disabled = older.start < 0;
     // update commands
-    document.body.dataset.selected = document.querySelector('#root [data-selected=true]') !== null;
+    const sds = document.querySelectorAll('#root [data-selected=true]');
+    document.body.dataset.selected =  sds.length !== 0;
+    document.body.dataset.single =  sds.length === 1;
     // update total count
     document.getElementById('total').textContent = args.total;
     // selection-changed

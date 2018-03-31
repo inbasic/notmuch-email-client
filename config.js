@@ -15,3 +15,8 @@ config.commands = [];
 config.archive = {
   action: ''
 };
+
+config.reply = {
+  action: '',
+  accounts: []
+};

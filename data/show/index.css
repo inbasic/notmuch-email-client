@@ -17,6 +17,7 @@ pre {
 
 .headers {
   width: 100%;
+  box-sizing: border-box;
   border-top: solid 1px #bfbfbf;
   border-bottom: solid 1px #bfbfbf;
   font-size: 12px;

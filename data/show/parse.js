@@ -6,12 +6,15 @@ function parse(obj, html = true, parent = document.getElementById('content'), at
     return obj.filter(o => o).reverse().map(o => parse(o, html, parent, attachments, id));
   }
   else {
-    if (obj['content-type'] === 'multipart/alternative' && obj.content.length === 2) {
+    if (obj['content-type'] === 'multipart/alternative') {
+      let body = [];
       if (html) {
-        return parse(obj.content.filter(o => o['content-type'] !== 'text/plain'), html, parent, attachments, id);
+        body = obj.content.filter(o => o['content-type'] !== 'text/plain');
       }
-      else {
-        return parse(obj.content.filter(o => o['content-type'] === 'text/plain'), html, parent, attachments, id);
+      body = body.length ? body : obj.content.filter(o => o['content-type'] === 'text/plain');
+
+      if (body) {
+        return parse(body, html, parent, attachments, id);
       }
     }
     if (obj['content-type'] === 'multipart/signed') {

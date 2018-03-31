@@ -4,12 +4,17 @@
 var utils = {};
 
 utils.clipboard = {};
-utils.clipboard.copy = str => {
+utils.clipboard.copy = str => new Promise(resolve => {
   document.oncopy = e => {
     e.clipboardData.setData('text/plain', str);
     e.preventDefault();
+    resolve();
   };
   document.execCommand('Copy', false, null);
+});
+
+utils.notify = async(message) => {
+  chrome.runtime.getBackgroundPage(bg => bg.webext.notifications.create({message}));
 };
 
 utils.files = query => new Promise((resolve, reject) => chrome.runtime.sendMessage({
@@ -51,4 +56,18 @@ utils.native.files.move = (files, dir) => new Promise(resolve => chrome.runtime.
   method: 'native.files.move',
   files,
   dir
+}, resolve));
+utils.native.files.file = (filename, content) => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'native.files.file',
+  filename,
+  content
+}, resolve));
+utils.native.files.remove = {};
+utils.native.files.remove.file = path => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'native.files.remove.file',
+  path
+}, resolve));
+utils.native.files.remove.directory = path => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'native.files.remove.directory',
+  path
 }, resolve));

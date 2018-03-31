@@ -13,6 +13,7 @@ document.getElementById('tree-css').value = localStorage.getItem('tree-css') || 
 document.getElementById('search-css').value = localStorage.getItem('search-css') || '';
 document.getElementById('client-css').value = localStorage.getItem('client-css') || '';
 document.getElementById('show-css').value = localStorage.getItem('show-css') || '';
+document.getElementById('reply-css').value = localStorage.getItem('reply-css') || '';
 
 document.getElementById('save').addEventListener('click', () => {
   const info = document.getElementById('info');
@@ -32,6 +33,7 @@ document.getElementById('save').addEventListener('click', () => {
   localStorage.setItem('search-css', document.getElementById('search-css').value);
   localStorage.setItem('client-css', document.getElementById('client-css').value);
   localStorage.setItem('show-css', document.getElementById('show-css').value);
+  localStorage.setItem('reply-css', document.getElementById('reply-css').value);
 
   window.setTimeout(() => info.textContent = '', delay);
 });

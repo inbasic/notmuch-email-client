@@ -1,11 +1,14 @@
-/* globals view, args, config, utils */
+/* globals view, args, config, utils, undo */
 'use strict';
 
 view.threads = () => [...document.querySelectorAll('tr[data-selected="true"]')]
   .map(tr => tr.dataset.thread);
 
+view.ids = () => [...document.querySelectorAll('tr[data-selected="true"]')]
+  .map(tr => tr.dataset.query);
+
 document.addEventListener('click', async e => {
-  const {target} = e;
+  const {target, shiftKey} = e;
   const cmd = target.dataset.cmd;
 
   if (
@@ -56,18 +59,39 @@ document.addEventListener('click', async e => {
     });
   }
   else if (cmd === 'copy-ids') {
-    const str = view.threads().map(id => 'thread:' + id).join(' ');
-    utils.clipboard.copy(str);
+    const threads = view.threads().map(id => 'thread:' + id);
+    const list = threads.join(' ') + '\n\n' + view.ids().join();
+
+    await utils.clipboard.copy(list);
+    utils.notify(threads.length + ' threads(s) copied to the clipboard');
+  }
+  else if (cmd === 'copy-actions') {
+    const str = JSON.stringify(undo.cache, null, 2);
+    await utils.clipboard.copy(str);
+    utils.notify(undo.cache.length + ' action(s) copied to the clipboard');
   }
   else if (cmd === 'copy-filenames') {
     const query = view.threads().map(id => 'thread:' + id).join(' ');
     utils.files(query).then(files => {
       utils.clipboard.copy(files.join('\n'));
+      utils.notify(files.length + ' file(s) copied to the clipboard');
     }).catch(e => console.log(e));
   }
   else if (cmd === 'open') {
     if (window.top !== window) {
-      window.top.api.popup.show('../show/index.html?query=' + view.threads().map(id => 'thread:' + id).join(' '));
+      const query = (shiftKey ? '' : args.query + ' ') + view.threads().map(id => 'thread:' + id).join(' ');
+      window.top.api.popup.show('../show/index.html?query=' + encodeURIComponent(query));
+    }
+    e.stopPropagation();
+  }
+  else if (cmd === 'reply') {
+    if (window.top !== window) {
+      const query = view.ids().shift().split(/[,\s]/).shift();
+      window.top.api.popup.show(
+        '../reply/index.html?query=' +
+        encodeURIComponent(query) +
+        '&replyTo=' + (shiftKey ? 'all' : 'sender')
+      );
     }
     e.stopPropagation();
   }

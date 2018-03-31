@@ -19,3 +19,6 @@ body {
 .vtree-leaf-label a>span {
   margin-left: 5px;
 }
+.vtree>li[data-vtree-id*="@"]>a {
+  font-weight: bold;
+}

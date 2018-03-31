@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Email Reply</title>
+    <link rel="stylesheet" href="../show/index.css">
+    <link rel="stylesheet" href="index.css">
+    <base target="_blank">
+    <meta charset="utf-8">
+  </head>
+
+  <body data-loading=true>
+    <datalist id="accounts"></datalist>
+    <table class="headers">
+      <tr>
+        <td>From</td>
+        <td><input type="search" id="From" list=accounts></td>
+      </tr>
+      <tr>
+        <td>In-reply-to</td>
+        <td><input type="text" id="In-reply-to"></td>
+      </tr>
+      <tr>
+        <td>References</td>
+        <td><input type="text" id="References"></td>
+      </tr>
+      <tr>
+        <td>Subject</td>
+        <td><input type="text" id="Subject"></td>
+      </tr>
+      <tr>
+        <td>To</td>
+        <td>
+          <div hbox>
+            <input type="text" id="To">
+            <input type="button" value="Reply" id="reply">
+          </div>
+        </td>
+      </tr>
+    </table>
+    <template id="header">
+      <table class="headers">
+        <tr>
+          <td>ID</td>
+          <td data-id="id"></td>
+        </tr>
+        <tr>
+          <td>Filename</td>
+          <td data-id="filename"></td>
+        </tr>
+        <tr>
+          <td>Date</td>
+          <td data-id="date"></td>
+        </tr>
+        <tr>
+          <td>From</td>
+          <td data-id="from"></td>
+        </tr>
+        <tr>
+          <td>Subject</td>
+          <td data-id="subject"></td>
+        </tr>
+        <tr>
+          <td>To</td>
+          <td data-id="to"></td>
+        </tr>
+        <tr>
+          <td>Tags</td>
+          <td data-id="tags"></td>
+        </tr>
+        <tr>
+          <td>Attachments</td>
+          <td data-id="attachments"></td>
+        </tr>
+      </table>
+    </template>
+    <div contenteditable="true" id="body">
+      <br>
+      <br>
+      <span></span>
+      <br>
+      <br>
+      <blockquote id="content"></blockquote>
+    </div>
+
+    <script src="../show/parse.js"></script>
+    <script src="/webext/utils/EventEmitter.js"></script>
+    <script src="/webext/core/base.js"></script>
+    <script src="/webext/core/chrome.runtime.js"></script>
+    <script src="/webext/core/chrome.storage.js"></script>
+    <script src="../utils.js"></script>
+    <script src="/config.js"></script>
+    <script src="build.js"></script>
+    <script src="reply.js"></script>
+  </body>
+</html>

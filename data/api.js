@@ -44,12 +44,18 @@ api.tree.select = id => api.e.tree.contentWindow.tree.select(id);
 
 /* popup view */
 api.popup = {};
-document.addEventListener('click', ({target}) => {
-  if (target.id === 'popup') {
-    target.classList.add('hide');
-    target.querySelector('iframe').src = 'about:blank';
-  }
-});
+{
+  const hide = () => {
+    api.e.popup.querySelector('iframe').src = 'about:blank';
+    api.e.popup.classList.add('hide');
+  };
+  document.addEventListener('click', ({target}) => {
+    if (target.id === 'popup') {
+      hide();
+    }
+  });
+  api.popup.hide = hide;
+}
 api.popup.show = src => {
   api.e.popup.querySelector('iframe').src = src;
   api.e.popup.classList.remove('hide');

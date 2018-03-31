@@ -47,7 +47,7 @@ body {
 #toolbar input:last-child {
   margin-right: 1px;
 }
-@media (max-width: 800px) {
+@media (max-width: 850px) {
   #toolbar input {
     min-width: 36px;
   }
@@ -71,6 +71,10 @@ body {
 #toolbar input[data-ocmd=trash],
 #toolbar input[data-cmd=trash] {
   background-position: center -415px;
+}
+#toolbar input[data-ocmd=reply],
+#toolbar input[data-cmd=reply] {
+  background-position: center -47px;
 }
 #toolbar input.no-icon {
   background-image: none;
@@ -115,6 +119,10 @@ body {
 
 #toolbar input:disabled,
 body[data-selected=false] .selection {
+  opacity: 0.3 !important;
+  pointer-events: none;
+}
+body[data-single=false] .single {
   opacity: 0.3 !important;
   pointer-events: none;
 }

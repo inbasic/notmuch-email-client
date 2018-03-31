@@ -30,7 +30,8 @@
       </div>
 
       <div>
-        <input type="button" data-cmd="open" value="Open" class="selection no-icon">
+        <input type="button" data-cmd="open" value="Open" class="selection no-icon" title="Use Shift + Click to open the entire thread">
+        <input type="button" data-cmd="reply" value="Reply" class="single no-icon" title="Use Shift + Click to reply to all">
       </div>
 
       <div>
@@ -55,6 +56,7 @@
             <li class="separator"></li>
             <li data-cmd="copy-ids" class="selection">Copy selected IDs</li>
             <li data-cmd="copy-filenames" class="selection">Copy filenames</li>
+            <li data-cmd="copy-actions">Copy last 30 actions</li>
           </ul>
         </div>
       </div>
@@ -105,6 +107,7 @@
       </table>
     </div>
     <script src="/config.js"></script>
+    <script src="undo.js"></script>
     <script async src="index.js"></script>
     <script src="/webext/utils/EventEmitter.js"></script>
     <script src="/webext/core/base.js"></script>

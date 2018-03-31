@@ -61,3 +61,88 @@ native.files.move = ({files, dir}) => webext.runtime.connectNative(native.id, {
     });
   `
 }).build();
+
+native.files.file = ({filename, content}) => webext.runtime.connectNative(native.id, {
+  permissions: ['fs', 'path', 'os'],
+  args: [filename, content],
+  script: String.raw`
+    /* globals require, push, close, args */
+    const os = require('os');
+    const fs = require('fs');
+    const path = require('path');
+    const [filename, content] = args;
+    fs.mkdtemp(path.join(os.tmpdir(), 'native-'), (error, directory) => {
+      if (error) {
+        push({
+          code: 1,
+          error
+        });
+        return close();
+      }
+      const file = path.join(directory, filename);
+      fs.writeFile(file, content, error => {
+        if(error) {
+          push({
+            code: 1,
+            error
+          });
+        }
+        push({
+          file,
+          directory,
+          filename,
+          code: 0
+        });
+        close();
+      });
+    });
+  `
+}).build();
+
+native.files.remove = {
+
+};
+
+native.files.remove.file = ({path}) => webext.runtime.connectNative(native.id, {
+  permissions: ['fs'],
+  args: [path],
+  script: String.raw`
+    /* globals require, push, close, args */
+    const fs = require('fs');
+
+    fs.unlink(args[0], error => {
+      if (error) {
+        push({
+          error,
+          code: 1
+        });
+      }
+      else {
+        push({code: 0});
+      }
+      close();
+    });
+  `
+}).build();
+
+native.files.remove.directory = ({path}) => webext.runtime.connectNative(native.id, {
+  permissions: ['fs'],
+  args: [path],
+  script: String.raw`
+    /* globals require, push, close, args */
+    const fs = require('fs');
+
+    fs.rmdir(args[0], error => {
+      if (error) {
+        push({
+          error,
+          code: 1
+        });
+      }
+      else {
+        push({code: 0});
+      }
+      close();
+    });
+  `
+}).build();

@@ -1,4 +1,4 @@
-/* globals parse */
+/* globals parse, get */
 'use strict';
 
 // apply user-styles
@@ -21,7 +21,7 @@ if (args.query) {
   chrome.runtime.sendMessage({
     method: 'notmuch.show',
     query: args.query,
-    entire: true
+    entire: false
   }, r => {
     try {
       parse(r.content);
@@ -36,14 +36,6 @@ if (args.query) {
 else {
   document.body.textContent = 'No query!';
 }
-
-var get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
-  method: 'notmuch.show',
-  query: 'id:' + id,
-  part: obj.id,
-  format: 'raw',
-  html: false
-}, resolve));
 
 document.addEventListener('click', ({target}) => {
   const cmd = target.dataset.cmd;

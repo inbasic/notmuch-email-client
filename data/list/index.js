@@ -56,7 +56,7 @@ document.getElementById('root').addEventListener('click', e => {
     const thread = tr.dataset.thread;
 
     if (window.top !== window) {
-      window.top.api.popup.show('../show/index.html?query=thread:' + thread);
+      window.top.api.popup.show('../show/index.html?query=thread:' + thread + ' ' + args.query);
       tr.dataset.selected = true;
       view.emit('update-toolbar');
     }

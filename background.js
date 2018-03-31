@@ -8,10 +8,14 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
     'notmuch.new': native.notmuch.new,
     'notmuch.search': native.notmuch.search,
     'notmuch.show': native.notmuch.show,
+    'notmuch.reply': native.notmuch.reply,
     'notmuch.config.get': native.notmuch.config.get,
     'native.exec': native.exec,
     'native.files.list': native.files.list,
-    'native.files.move': native.files.move
+    'native.files.move': native.files.move,
+    'native.files.file': native.files.file,
+    'native.files.remove.file': native.files.remove.file,
+    'native.files.remove.directory': native.files.remove.directory
   })[request.method];
   if (command) {
     if (request.method === 'notmuch.tag' || request.method === 'notmuch.new') {
@@ -35,9 +39,16 @@ webext.runtime.on('message', (request, sender) => {
 }).if(({method}) => method === 'notmuch.count');
 
 // browser-action
-webext.browserAction.on('clicked', () => webext.tabs.single({
-  url: '/data/client/index.html'
-}));
+{
+  const onClicked = () => webext.tabs.single({
+    url: '/data/client/index.html'
+  });
+  webext.browserAction.on('clicked', onClicked);
+  webext.notifications.on('clicked', notificationId => {
+    webext.notifications.clear(notificationId);
+    onClicked();
+  });
+}
 
 // FAQs and Feedback
 webext.runtime.on('start-up', () => {

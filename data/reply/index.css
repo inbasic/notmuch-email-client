@@ -1,0 +1,41 @@
+#content .headers {
+  display: none;
+}
+.headers input[type=button] {
+  cursor: pointer;
+  outline: none;
+  margin-left: 3px;
+}
+.headers input[type=button]:disabled {
+  opacity: 0.3;
+}
+.headers input[type=button]:active {
+  opacity: 0.5;
+}
+.headers input[type=search],
+.headers input[type=text] {
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  text-indent: 3px;
+}
+.headers input {
+  border: solid 1px #c5c5c569;
+  border-radius: 0;
+}
+body>.headers td:last-child {
+  padding-right: 10px;
+}
+body>.headers {
+  margin-top: 0;
+}
+
+#body {
+  outline: none;
+  padding: 0 10px;
+  overflow: auto;
+}
+
+[hbox] {
+  display: flex;
+}
