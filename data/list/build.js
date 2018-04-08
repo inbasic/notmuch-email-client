@@ -10,6 +10,7 @@ args.limit = Math.max(2, Number(args.limit || 50));
 args.query = args.query || 'empty';
 args.offset = Math.max(0, Number(args.offset || 0));
 args.total = Number(args.total || 0);
+args.sort = args.sort || 'flagged'; // subject-az, subject-za, flagged
 
 // make sure the count is called, otherwise call it
 var doCount;
@@ -86,21 +87,43 @@ view.update = (entry, parent) => {
   view.show = ({entries, start}) => {
     tbody.dataset.loading = false;
 
-    entries.sort((a, b) => { // inset flagged first
+    const ss = args.sort.indexOf('subject') !== -1;
+    const fs = args.sort.indexOf('flagged') !== -1;
+
+    const compare = (a, b) => {
+      const za = args.sort.indexOf('subject-za') !== -1;
+      const r = (za ? -1 : 1) * a.subject.localeCompare(b.subject);
+      return r || b.timestamp - a.timestamp;
+    };
+
+    // sorting
+    entries = entries.sort((a, b) => {
       const af = a.tags.indexOf('flagged') !== -1;
       const bf = b.tags.indexOf('flagged') !== -1;
 
-      if (bf && af) {
-        return b.timestamp - a.timestamp;
+      if (bf && af && fs) {
+        if (ss) {
+          return compare(a, b);
+        }
+        else {
+          return b.timestamp - a.timestamp;
+        }
       }
-      else if (bf) {
+      else if (bf && fs) {
         return +1;
       }
-      else if (af) {
+      else if (af && fs) {
         return -1;
       }
+      else if (ss) {
+        return compare(a, b);
+      }
       return b.timestamp - a.timestamp;
-    }).forEach(view.add);
+    });
+
+    // inset flagged first
+
+    entries.forEach(view.add);
     newer.start = start + entries.length;
     older.start = start - args.limit;
     older.disabled = older.start < 0;
@@ -130,7 +153,8 @@ view.on('search', ({start}) => {
     method: 'notmuch.search'
   }, args), r => {
     if (r.error) {
-      tbody.dataset.error = r.message || r.stderr || 'unexpected error!';
+      console.log(r);
+      tbody.dataset.error = r.message || (r.error ? r.error.stderr : '') || 'unexpected error!';
       tbody.dataset.loading = false;
     }
     else {

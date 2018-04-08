@@ -24,14 +24,15 @@ api.search.insert = query => {
 api.list = {};
 {
   const list = document.getElementById('list');
-  api.list.show = ({query, total = 0}) => {
-    webext.storage.get({
-      page: 50
-    }).then(({page}) => {
-      list.src = `/data/list/index.html?query=${encodeURIComponent(query)}&total=${total}&limit=${page}`;
-      api.search.insert(query);
+  api.list.show = async({query, total = 0}) => {
+    const {page, sort} = await webext.storage.get({
+      page: 50,
+      sort: 'flagged'
     });
+    list.src = `/data/list/index.html?query=${encodeURIComponent(query)}&total=${total}&limit=${page}&sort=${sort}`;
+    api.search.insert(query);
   };
+  api.list.emit = name => list.contentWindow.view.emit(name);
 }
 
 /* client view */

@@ -5,17 +5,27 @@ native.notmuch.search = ({query, limit = 50, offset = 0, output = 'summary'}) =>
   query = native.notmuch.clean(query, ['limit', 'offset', 'format', 'output']);
 
   return webext.runtime.connectNative(native.id, {
-    permissions: ['child_process'],
+    permissions: ['child_process', 'os'],
     args: [native.path, query, limit, offset, output],
     script: String.raw`
       /* globals args, push, close, require */
       'use strict';
 
       const [command, query, limit, offset, output] = args;
-      const notmuch = require('child_process').spawn(
-        command,
-        ['search', '--limit=' + limit, '--offset=' + offset, '--format=json', '--output=' + output, query]
-      );
+      let notmuch;
+      if (require('os').platform() === 'win32') {
+        notmuch = require('child_process').spawn(
+          '${native.windows}',
+          ['notmuch', 'search', '--limit=' + limit, '--offset=' + offset, '--format=json', '--output=' + output, query]
+        );
+      }
+      else {
+        notmuch = require('child_process').spawn(
+          command,
+          ['search', '--limit=' + limit, '--offset=' + offset, '--format=json', '--output=' + output, query]
+        );
+      }
+
       let stderr = '';
       let stdout = '';
       notmuch.stdout.on('data', data => stdout += data);
@@ -31,6 +41,7 @@ native.notmuch.search = ({query, limit = 50, offset = 0, output = 'summary'}) =>
           close();
         }
       });
+      notmuch.stdin.end();
     `
   }).build();
 };

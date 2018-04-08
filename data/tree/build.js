@@ -13,6 +13,7 @@ var tree = new EventEmitter();
   const v = new VanillaTree('#root', {
     placeholder: 'Please wait...',
   });
+
   // cache
   const cache = [];
 

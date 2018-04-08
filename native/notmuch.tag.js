@@ -10,10 +10,13 @@ native.notmuch.tag = ({threads = [], ids = [], tags, query = '', tabId}) => {
   args.push(query);
 
   return webext.runtime.connectNative(native.id, {
-    permissions: ['child_process'],
+    permissions: ['child_process', 'os'],
     args: [native.path, args],
     script: String.raw`
-      const notmuch = require('child_process').spawn(args[0], args[1]);
+      const notmuch = require('os').platform() === 'win32' ?
+        require('child_process').spawn('${native.windows}', ['notmuch', ...args[1]]) :
+        require('child_process').spawn(args[0], args[1]);
+
       let stderr = '', stdout = '';
       notmuch.stdout.on('data', data => stdout += data);
       notmuch.stderr.on('data', data => stderr += data);
@@ -21,6 +24,7 @@ native.notmuch.tag = ({threads = [], ids = [], tags, query = '', tabId}) => {
         push({code, stdout, stderr});
         close();
       });
+      notmuch.stdin.end();
     `
   }).build().then(r => {
     // if message is tagged as "spam" or "deleted", count is necessary

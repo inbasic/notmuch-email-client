@@ -26,6 +26,18 @@ if (args.query) {
     try {
       parse(r.content);
       document.body.dataset.loading = false;
+
+      // mark as read
+      chrome.runtime.sendMessage({
+        method: 'notmuch.tag',
+        threads: [], // query already has the threads
+        tags: ['-unread'],
+        query: args.query
+      }, () => {
+        if (window.top !== window) {
+          window.top.api.list.emit('refresh');
+        }
+      });
     }
     catch (e) {
       console.log(e);

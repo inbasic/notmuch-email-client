@@ -1,5 +1,12 @@
-/* globals get */
 'use strict';
+
+var get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'notmuch.show',
+  query: 'id:' + id,
+  part: obj.id,
+  format: 'raw',
+  html: false
+}, resolve));
 
 function parse(obj, html = true, parent = document.getElementById('content'), attachments = null, id = null) {
   if (Array.isArray(obj)) {
@@ -65,7 +72,8 @@ parse.headers = obj => {
   const ce = document.getElementById('header');
   const header = document.importNode(ce.content, true);
   header.querySelector('[data-id=id]').textContent = obj.id;
-  header.querySelector('[data-id=filename]').textContent = obj.filename.join(', ');
+  header.querySelector('[data-id=filename]').textContent =
+    (Array.isArray(obj.filename) ? obj.filename : [obj.filename]).join(', ');
   header.querySelector('[data-id=date]').textContent = obj.headers.Date;
   header.querySelector('[data-id=from]').textContent = obj.headers.From;
   header.querySelector('[data-id=subject]').textContent = obj.headers.Subject;

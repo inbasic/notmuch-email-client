@@ -2,18 +2,22 @@
 'use strict';
 
 native.notmuch.count = ({query}) => webext.runtime.connectNative(native.id, {
-  permissions: ['child_process'],
+  permissions: ['child_process', 'os'],
   args: [native.path, native.notmuch.clean(query, ['output'])],
   script: String.raw`
     const [command, query] = args;
 
     const exec = args => new Promise(resolve => {
-      const notmuch = require('child_process').spawn(command, args);
+      const notmuch = require('os').platform() === 'win32' ?
+        require('child_process').spawn('${native.windows}', ['notmuch', ...args]) :
+        require('child_process').spawn(command, args);
+
       let stderr = '';
       let stdout = '';
       notmuch.stdout.on('data', data => stdout += data);
       notmuch.stderr.on('data', data => stderr += data);
       notmuch.on('close', code => resolve({code, stdout, stderr}));
+      notmuch.stdin.end();
     });
 
     Promise.all([

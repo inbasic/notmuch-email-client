@@ -1,4 +1,4 @@
-/* globals view */
+/* globals view, args */
 'use strict';
 
 // apply user-styles
@@ -32,33 +32,33 @@ document.addEventListener('click', ({target}) => {
 // select, flag and star
 document.getElementById('root').addEventListener('click', e => {
   const target = e.target;
+
   const cmd = target.dataset.cmd;
   const tr = target.closest('tr');
-
+  // change the active tr
   if (tr) {
     tr.querySelector('[data-id=active] input').click();
   }
 
-  if (cmd === 'toggle-flag') {
-    tr.dataset.flagged = tr.dataset.flagged !== 'true';
-  }
-  // do with a delay
-  else if (tr && e.isTrusted && e.detail === 1) {
-    window.setTimeout(() => {
+  if (target.closest('[data-id="select"]')) { // skip checkbox
+    // do with a delay
+    return window.setTimeout(() => {
       if (e.defaultPrevented === false) {
         tr.dataset.selected = tr.dataset.selected !== 'true';
         view.emit('update-toolbar');
       }
     }, 50);
   }
-  else if (tr && e.isTrusted && e.detail === 2) {
+
+  if (cmd === 'toggle-flag') {
+    tr.dataset.flagged = tr.dataset.flagged !== 'true';
+  }
+  else if (tr && e.isTrusted) {
     const tr = target.closest('tr');
     const thread = tr.dataset.thread;
 
     if (window.top !== window) {
       window.top.api.popup.show('../show/index.html?query=thread:' + thread + ' ' + args.query);
-      tr.dataset.selected = true;
-      view.emit('update-toolbar');
     }
   }
 });

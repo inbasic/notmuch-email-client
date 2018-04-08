@@ -10,7 +10,7 @@ native.notmuch.show = ({
   part = null,
   format = 'json'
 }) => webext.runtime.connectNative(native.id, {
-  permissions: ['child_process'],
+  permissions: ['child_process', 'os'],
   args: [
     native.path,
     native.notmuch.clean(query, [
@@ -36,7 +36,10 @@ native.notmuch.show = ({
     params.push('--body=' + body, '--exclude=' + exclude);
     params.push(query);
 
-    const notmuch = require('child_process').spawn(command, params);
+    const notmuch = require('os').platform() === 'win32' ?
+      require('child_process').spawn('${native.windows}', ['notmuch', ...params]) :
+      require('child_process').spawn(command, params);
+
     notmuch.stdout.on('data', stdout => push({
       stdout: format === 'json' ? String(stdout) : stdout
     }));
@@ -49,6 +52,7 @@ native.notmuch.show = ({
       });
       close();
     });
+    notmuch.stdin.end();
   `
 }).build().then(r => {
   if (format === 'json') {

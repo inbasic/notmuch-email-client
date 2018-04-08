@@ -44,6 +44,9 @@ body {
   cursor: pointer;
   box-sizing: border-box;
 }
+#toolbar input {
+  font-size: 11px;
+}
 #toolbar input:last-child {
   margin-right: 1px;
 }

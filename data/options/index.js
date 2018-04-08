@@ -37,3 +37,54 @@ document.getElementById('save').addEventListener('click', () => {
 
   window.setTimeout(() => info.textContent = '', delay);
 });
+
+document.getElementById('import').addEventListener('click', () => {
+  const fileInput = document.createElement('input');
+  fileInput.style.display = 'none';
+  fileInput.type = 'file';
+  fileInput.accept = '.json';
+  fileInput.acceptCharset = 'utf-8';
+
+  document.body.appendChild(fileInput);
+  fileInput.initialValue = fileInput.value;
+  fileInput.onchange = readFile;
+  fileInput.click();
+
+  function readFile() {
+    if (fileInput.value !== fileInput.initialValue) {
+      const file = fileInput.files[0];
+      if (file.size > 100e6) {
+        console.warn('100MB backup? I don\'t believe you.');
+        return;
+      }
+      const fReader = new FileReader();
+      fReader.onloadend = event => {
+        fileInput.remove();
+        const {synced, asynced} = JSON.parse(event.target.result);
+        Object.entries(synced).forEach(([key, value]) => localStorage.setItem(key, value));
+        chrome.storage.local.set(asynced, () => {
+          chrome.runtime.reload();
+          window.close();
+        });
+      };
+      fReader.readAsText(file, 'utf-8');
+    }
+  }
+});
+
+document.getElementById('export').addEventListener('click', async() => {
+  const asynced = await webext.storage.get(null);
+
+  const text = JSON.stringify({
+    asynced,
+    synced: localStorage
+  }, null, '  ');
+  const blob = new Blob([text], {type: 'application/json'});
+  const objectURL = URL.createObjectURL(blob);
+  chrome.downloads.download({
+    url: objectURL,
+    filename: 'notmuch-client-preferences.json'
+  }, () => {
+    window.setTimeout(() => URL.revokeObjectURL(objectURL), 10000);
+  });
+});
