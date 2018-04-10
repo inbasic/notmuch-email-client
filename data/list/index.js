@@ -58,6 +58,9 @@ document.getElementById('root').addEventListener('click', e => {
     const thread = tr.dataset.thread;
 
     if (window.top !== window) {
+      document.querySelector('[data-cmd=select-none]').click();
+      tr.dataset.selected = true;
+      view.emit('update-toolbar');
       window.top.api.popup.show('../show/index.html?query=thread:' + thread + ' ' + args.query);
     }
   }

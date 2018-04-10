@@ -12,7 +12,7 @@ native.notmuch.reply = ({query, replyTo = 'all'}) => {
       'use strict';
 
       const [command, query, replyTo] = args;
-      const notmuch = require('os').platform() === 'win32' ? :
+      const notmuch = require('os').platform() === 'win32' ?
         require('child_process').spawn(
           '${native.windows}',
           ['notmuch', 'reply', '--format=json', '--reply-to=' + replyTo, query]

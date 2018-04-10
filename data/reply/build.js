@@ -30,12 +30,14 @@ if (args.query) {
         query: args.query,
         replyTo: args.replyTo || 'all'
       }, r => {
+        console.log(r);
         const info = document.querySelector('#body span');
         document.body.dataset.loading = false;
         if (r.error) {
           document.getElementById('reply').disabled = true;
           return info.textContent = r.error.stderr;
         }
+        console.log(r);
         const content = r.content;
         document.getElementById('From').value = content['reply-headers']['From'];
         document.getElementById('In-reply-to').value = content['reply-headers']['In-reply-to'];
