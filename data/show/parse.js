@@ -42,10 +42,6 @@ function parse(obj, html = true, parent = document.getElementById('content'), at
       else if (obj['content-type'] === 'text/html') {
         const parser = new DOMParser();
         const doc = parser.parseFromString(obj.content, 'text/html');
-        [...doc.images].forEach(img => {
-          img.dataset.src = img.src;
-          img.src = '';
-        });
         parse.images([...doc.images]);
         [...doc.childNodes].filter(node => node.nodeType !== 10)
           .forEach(node => parent.appendChild(node));
@@ -132,8 +128,8 @@ function humanFileSize(bytes) {
     }
   };
   parse.images = imgs => {
-    imgs.filter(i => i.dataset.src.startsWith('cid:')).forEach(img => {
-      const id = img.dataset.src.replace('cid:', '');
+    imgs.filter(i => i.src.startsWith('cid:')).forEach(img => {
+      const id = img.src.replace('cid:', '');
       if (cache[id]) {
         get(cache[id].id, cache[id].obj).then(src => img.src = src);
       }
@@ -141,7 +137,6 @@ function humanFileSize(bytes) {
         postponed[id] = postponed[id] || [];
         postponed[id].push(img);
       }
-      delete img.dataset.src;
     });
   };
 }

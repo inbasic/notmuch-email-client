@@ -58,4 +58,9 @@ document.addEventListener('click', ({target}) => {
       filename: target.obj.filename
     }));
   }
+  else if (cmd === 'close-me') {
+    if (window.top !== window) {
+      window.top.api.popup.hide();
+    }
+  }
 });

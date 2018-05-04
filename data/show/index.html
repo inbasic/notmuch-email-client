@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="index.css">
     <base target="_blank">
     <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none';">
   </head>
 
   <body data-loading=true>
@@ -41,7 +42,12 @@
         </tr>
         <tr>
           <td>Attachments</td>
-          <td data-id="attachments"></td>
+          <td>
+            <div style="display: flex; align-items: center;">
+              <div data-id="attachments" style="flex: 1"></div>
+              <input type="button" value="Close" data-cmd="close-me">
+            </div>
+          </td>
         </tr>
       </table>
     </template>

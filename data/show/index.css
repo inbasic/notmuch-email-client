@@ -40,6 +40,19 @@ pre {
 .headers [data-id="subject"] {
   font-weight: bold;
 }
+
+#tools input,
+.headers input {
+  border: solid 1px #c5c5c569;
+  border-radius: 0;
+  cursor: pointer;
+  outline: none;
+}
+#tools input[type=button]:active,
+.headers input[type=button]:active {
+  opacity: 0.5;
+}
+
 .body {
   padding: 0 10px;
 }
@@ -61,6 +74,10 @@ body[data-loading=true] {
 }
 [data-id=attachments] span:not(:last-child):after {
   content: ', ';
+}
+
+#content>div:not(:first-child) [data-cmd=close-me] {
+  display: none;
 }
 /* email related */
 td,

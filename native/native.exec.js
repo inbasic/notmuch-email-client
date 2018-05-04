@@ -1,9 +1,7 @@
 /* globals webext, native */
 'use strict';
 
-native.exec = ({action}) => {
-console.log(action);
-return webext.runtime.connectNative(native.id, {
+native.exec = ({action}) => webext.runtime.connectNative(native.id, {
   permissions: ['child_process', 'os'],
   args: [action],
   script: String.raw`
@@ -23,4 +21,3 @@ return webext.runtime.connectNative(native.id, {
     cmd.stdin.end();
   `
 }).build();
-}

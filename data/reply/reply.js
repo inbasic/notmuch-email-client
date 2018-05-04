@@ -1,4 +1,4 @@
-/* globals utils, config */
+/* globals utils, config, args */
 'use strict';
 {
   const reply = document.getElementById('reply');
@@ -25,16 +25,23 @@
         .replace('[to]', document.getElementById('To').value);
       if (action) {
         const r = await utils.native.exec(action);
-        console.log(r);
         // clean up
         await utils.native.files.remove.file(file);
         await utils.native.files.remove.directory(directory);
         reply.disabled = false;
-        if (r.error) {
-          window.alert(r.error.stderr);
+        if (r.code !== 0) {
+          console.error(r);
+          window.alert(r.error ? r.error.stderr : JSON.stringify(r, null, '  '));
         }
         else {
-          window.top.api.popup.hide();
+          console.log(r.stdout);
+          utils.notmuch.tag(args.query, ['+replied']).then(() => {
+            const {api} = window.top;
+            if (api) {
+              api.list.emit('refresh', true);
+              api.popup.hide();
+            }
+          });
         }
       }
       else {

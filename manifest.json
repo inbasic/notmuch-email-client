@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.3.0",
+  "version": "0.3.2",
   "name": "Email Client for Notmuch",
   "description": "a powerful email client based on notmuch offline email indexing tool",
 
@@ -16,6 +16,8 @@
     "clipboardWrite",
     "https://api.github.com/repos/andy-portmen/native-client/releases/latest"
   ],
+
+  "offline_enabled": true,
 
   "browser_action":{
     "default_icon": {

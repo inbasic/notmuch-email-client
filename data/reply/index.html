@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="index.css">
     <base target="_blank">
     <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none';">
   </head>
 
   <body data-loading=true>
@@ -34,6 +35,7 @@
           <div hbox>
             <input type="text" id="To">
             <input type="button" value="Reply" id="reply">
+            <input type="button" value="Close" id="close-me">
           </div>
         </td>
       </tr>
@@ -74,6 +76,7 @@
         </tr>
       </table>
     </template>
+    <div id="tools"></div>
     <div contenteditable="true" id="body">
       <br>
       <br>
@@ -92,5 +95,6 @@
     <script src="/config.js"></script>
     <script src="build.js"></script>
     <script src="reply.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>

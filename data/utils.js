@@ -45,6 +45,11 @@ utils.notmuch.count = query => new Promise(resolve => chrome.runtime.sendMessage
   method: 'notmuch.count',
   query
 }, resolve));
+utils.notmuch.tag = (query, tags) => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'notmuch.tag',
+  query,
+  tags
+}, resolve));
 
 utils.native = {};
 utils.native.exec = action => new Promise(resolve => chrome.runtime.sendMessage({
