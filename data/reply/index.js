@@ -104,13 +104,15 @@ document.getElementById('close-me').addEventListener('click', () => {
     'desc': 'Right-justifies the selection or the insertion point.'
   }, {
     'cmd': 'outdent',
-    'desc': 'Outdents the line containing the selection or insertion point.'
+    'desc': 'Outdents the line containing the selection or insertion point.',
+    'style': 'font-weight: bold'
   }, {
     'cmd': 'paste',
     'desc': 'Pastes the clipboard contents at the insertion point (replaces current selection). Clipboard capability must be enabled in the user.js preference file. See'
   }, {
     'cmd': 'removeFormat',
-    'desc': 'Removes all formatting from the current selection.'
+    'desc': 'Removes all formatting from the current selection.',
+    'style': 'font-weight: bold'
   }, {
     'cmd': 'strikeThrough',
     'desc': 'Toggles strikethrough on/off for the selection or at the insertion point.'
@@ -132,13 +134,16 @@ document.getElementById('close-me').addEventListener('click', () => {
   }];
 
   const tools = document.getElementById('tools');
-  commands.forEach(({cmd, desc}, id) => {
+  commands.forEach(({cmd, desc, style}, id) => {
     if (document.queryCommandSupported(cmd)) {
       const input = document.createElement('input');
       input.value = cmd;
       input.type = 'button';
       input.title = desc;
       input.dataset.id = id;
+      if (style) {
+        input.style = style;
+      }
       tools.appendChild(input);
     }
   });

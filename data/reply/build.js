@@ -2,6 +2,19 @@
 'use strict';
 
 parse.images = () => {};
+parse.headers = (obj, parent) => {
+  const div = document.createElement('div');
+  const body = document.createElement('div');
+  body.classList.add('body');
+
+  div.appendChild(body);
+  parent.appendChild(div);
+
+  return Promise.resolve({
+    body,
+    attachments: window
+  });
+};
 
 // apply user-styles
 {
@@ -25,7 +38,7 @@ if (args.query) {
     query: args.query
   }, r => {
     try {
-      parse(r.content);
+      parse(r.content, true, document.getElementById('content'));
 
       chrome.runtime.sendMessage({
         method: 'notmuch.reply',

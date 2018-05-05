@@ -1,4 +1,4 @@
-/* globals parse, get */
+/* globals parse */
 'use strict';
 
 // apply user-styles
@@ -48,19 +48,3 @@ if (args.query) {
 else {
   document.body.textContent = 'No query!';
 }
-
-document.addEventListener('click', ({target}) => {
-  const cmd = target.dataset.cmd;
-
-  if (cmd === 'attachment') {
-    get(target.dataset.id, target.obj).then(url => chrome.downloads.download({
-      url,
-      filename: target.obj.filename
-    }));
-  }
-  else if (cmd === 'close-me') {
-    if (window.top !== window) {
-      window.top.api.popup.hide();
-    }
-  }
-});

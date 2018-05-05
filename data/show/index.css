@@ -6,86 +6,37 @@ body {
   background-color: #fff;
   font-size: 13px;
   margin: 0;
-  display: flex;
-  flex-direction: column;
 }
 body,
 pre {
   font-size: 13px;
   font-family: "Helvetica Neue",Helvetica,sans-serif;
 }
-
-.headers {
-  width: 100%;
-  box-sizing: border-box;
-  border-top: solid 1px #bfbfbf;
-  border-bottom: solid 1px #bfbfbf;
-  font-size: 12px;
-  margin: 30px 0 10px 0;
-  padding: 5px 5px 5px;
-  background-color: rgba(0, 0, 0, 0.01);
-}
-#content>div:first-child .headers {
-  margin-top: 0;
-  padding-top: 5px;
-}
-.headers td:first-child {
-  width: 10px;
-  white-space: nowrap;
-  padding: 0 10px;
-  text-align: right;
-  font-weight: bold;
-  color: #a1a1a1;
-}
-.headers [data-id="subject"] {
-  font-weight: bold;
-}
-
-#tools input,
-.headers input {
-  border: solid 1px #c5c5c569;
-  border-radius: 0;
-  cursor: pointer;
-  outline: none;
-}
-#tools input[type=button]:active,
-.headers input[type=button]:active {
-  opacity: 0.5;
-}
-
-.body {
-  padding: 0 10px;
-}
-#content {
-  overflow: auto;
-  flex: 1;
-}
 body[data-loading=true] {
   background: #fff url('/data/images/sl.gif') center center no-repeat;
 }
+iframe.headers {
+  width: 100%;
+  height: 160px;
+  border: none;
+  border-bottom: solid 1px #bfbfbf;
+}
+body>div:not(:first-of-type) iframe.headers {
+  border-top: solid 1px #bfbfbf;
+}
+div.body {
+  padding: 10px;
+}
 
-[data-id="id"] {
-  padding-right: 10px;
-  text-align: left;
-}
-[data-id=attachments] span {
-  cursor: pointer;
-  font-weight: bold;
-}
-[data-id=attachments] span:not(:last-child):after {
-  content: ', ';
-}
-
-#content>div:not(:first-child) [data-cmd=close-me] {
-  display: none;
-}
 /* email related */
+div.body
 td,
 table {
   border: none;
 }
 pre {
   white-space: pre-line;
+  margin: 0;
 }
 
 blockquote {

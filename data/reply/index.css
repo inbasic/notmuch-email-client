@@ -1,3 +1,41 @@
+.headers {
+  width: 100%;
+  font-size: 12px;
+  padding: 5px;
+}
+/* first column */
+.headers td:first-child {
+  width: 10px;
+  white-space: nowrap;
+  padding: 0 10px;
+  text-align: right;
+  font-weight: bold;
+  color: #a1a1a1;
+}
+.headers [data-id="subject"] {
+  font-weight: bold;
+}
+#tools input,
+.headers input {
+  border: solid 1px #c5c5c569;
+  border-radius: 0;
+  cursor: pointer;
+  outline: none;
+  font-size: 11px;
+}
+#tools input {
+  padding: 5px;
+}
+#tools input[type=button]:active,
+.headers input[type=button]:active {
+  opacity: 0.5;
+}
+
+[data-id="id"] {
+  padding-right: 10px;
+  text-align: left;
+}
+
 #content .headers {
   display: none;
 }

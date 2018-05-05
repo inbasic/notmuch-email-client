@@ -8,7 +8,7 @@ var get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
   html: false
 }, resolve));
 
-function parse(obj, html = true, parent = document.getElementById('content'), attachments = null, id = null) {
+function parse(obj, html = true, parent = document.body, attachments = null, id = null) {
   if (Array.isArray(obj)) {
     return obj.filter(o => o).reverse().map(o => parse(o, html, parent, attachments, id));
   }
@@ -28,15 +28,14 @@ function parse(obj, html = true, parent = document.getElementById('content'), at
       return obj.content.forEach(o => parse(o, html, parent, id));
     }
     if (obj.body) {
-      return parse.headers(obj).then(section => {
-        parent.appendChild(section.parent);
+      return parse.headers(obj, parent).then(section => {
         parse(obj.body, html, section.body, section.attachments, obj.id);
       });
     }
     else if (obj.content) {
       if (obj['content-type'] === 'text/plain') {
         parent.appendChild(Object.assign(document.createElement('pre'), {
-          textContent: obj.content
+          textContent: obj.content.trim()
         }));
       }
       else if (obj['content-type'] === 'text/html') {
@@ -62,60 +61,45 @@ function parse(obj, html = true, parent = document.getElementById('content'), at
   }
 }
 
-parse.headers = obj => {
-  const parent = document.createElement('div');
+parse.headers = (obj, parent) => {
+  const div = document.createElement('div');
 
-  const ce = document.getElementById('header');
-  const header = document.importNode(ce.content, true);
-  header.querySelector('[data-id=id]').textContent = obj.id;
-  header.querySelector('[data-id=filename]').textContent =
-    (Array.isArray(obj.filename) ? obj.filename : [obj.filename]).join(', ');
-  header.querySelector('[data-id=date]').textContent = obj.headers.Date;
-  header.querySelector('[data-id=from]').textContent = obj.headers.From;
-  header.querySelector('[data-id=subject]').textContent = obj.headers.Subject;
-  header.querySelector('[data-id=to]').textContent = obj.headers.To;
-  header.querySelector('[data-id=tags]').textContent = obj.tags.join(', ');
-  parent.appendChild(header);
+  const headers = document.createElement('iframe');
+  headers.classList.add('headers');
 
   const body = document.createElement('div');
   body.classList.add('body');
 
-  parent.appendChild(body);
-  return Promise.resolve({
-    parent,
-    body,
-    attachments: parent.querySelector('[data-id=attachments]')
+  return new Promise(resolve => {
+    headers.addEventListener('load', () => {
+      headers.contentWindow.postMessage({
+        method: 'headers',
+        obj
+      }, '*');
+
+      resolve({
+        body,
+        attachments: headers.contentWindow
+      });
+    });
+    headers.src = 'headers.html';
+    div.appendChild(headers);
+    div.appendChild(body);
+    parent.appendChild(div);
   });
 };
-
-function humanFileSize(bytes) {
-  const thresh = 1024;
-  if (Math.abs(bytes) < thresh) {
-    return bytes + ' B';
-  }
-  const units = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-  let u = -1;
-  do {
-    bytes /= thresh;
-    u += 1;
-  }
-  while (Math.abs(bytes) >= thresh && u < units.length - 1);
-
-  return bytes.toFixed(1) + ' ' + units[u];
-}
 
 {
   const cache = {};
   const postponed = {};
 
   parse.attachment = (obj, id, parent) => {
-    const span = document.createElement('span');
-    span.obj = obj;
-    span.href = '#';
-    span.dataset.id = id;
-    span.dataset.cmd = 'attachment';
-    span.textContent = `${obj.filename} (${humanFileSize(obj['content-length'])})`;
-    parent.appendChild(span);
+    parent.postMessage({
+      method: 'attachment',
+      obj,
+      id
+    }, '*');
+
     const cid = obj['content-id'];
     if (cid) {
       cache[cid] = {obj, id};
@@ -137,6 +121,7 @@ function humanFileSize(bytes) {
         postponed[id] = postponed[id] || [];
         postponed[id].push(img);
       }
+      img.src = '';
     });
   };
 }

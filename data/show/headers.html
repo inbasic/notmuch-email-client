@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';">
+  </head>
+    <style type="text/css">
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-size: 13px;
+        font-family: "Helvetica Neue",Helvetica,sans-serif;
+        margin: 0;
+        background-color: rgba(0, 0, 0, 0.01);
+        overflow: hidden;
+      }
+      table {
+        width: 100%;
+        font-size: 12px;
+        padding: 5px;
+      }
+      /* first column */
+      table td:first-child {
+        width: 10px;
+        white-space: nowrap;
+        padding: 0 10px;
+        text-align: right;
+        font-weight: bold;
+        color: #a1a1a1;
+      }
+      table [data-id="subject"] {
+        font-weight: bold;
+      }
+      table input {
+        border: solid 1px #c5c5c569;
+        border-radius: 0;
+        cursor: pointer;
+        outline: none;
+        font-size: 11px;
+      }
+      table input[type=button]:active {
+        opacity: 0.5;
+      }
+
+      [data-id="id"] {
+        padding-right: 10px;
+        text-align: left;
+      }
+      [data-id=attachments] span {
+        cursor: pointer;
+        font-weight: bold;
+      }
+      [data-id=attachments] span:not(:last-child):after {
+        content: ', ';
+      }
+    </style>
+  <body>
+    <table class="headers">
+      <tbody>
+        <tr>
+          <td>ID</td>
+          <td data-id="id"></td>
+        </tr>
+        <tr>
+          <td>Filename</td>
+          <td data-id="filename"></td>
+        </tr>
+        <tr>
+          <td>Date</td>
+          <td data-id="date"></td>
+        </tr>
+        <tr>
+          <td>From</td>
+          <td data-id="from"></td>
+        </tr>
+        <tr>
+          <td>Subject</td>
+          <td data-id="subject"></td>
+        </tr>
+        <tr>
+          <td>To</td>
+          <td data-id="to"></td>
+        </tr>
+        <tr>
+          <td>Tags</td>
+          <td data-id="tags"></td>
+        </tr>
+        <tr>
+          <td>Attachments</td>
+          <td>
+            <div style="display: flex; align-items: center;">
+              <div data-id="attachments" style="flex: 1"></div>
+              <input type="button" value="Close" data-cmd="close-me">
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <script src="headers.js"></script>
+  </body>
+</html>

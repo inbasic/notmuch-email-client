@@ -5,8 +5,6 @@
 
   reply.addEventListener('click', async() => {
     reply.disabled = true;
-    // remove headers
-    document.querySelectorAll('#body .headers').forEach(e => e.remove());
     // get content
     const body = document.getElementById('body').innerHTML;
     // create tmp file
