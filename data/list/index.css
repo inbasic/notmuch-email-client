@@ -35,14 +35,20 @@ body {
   background-color: #f3f3f3;
   min-width: 72px;
   height: 27px;
-  background-repeat: no-repeat;
-  background-image: url(icons/actions.png);
   opacity: .55;
   margin-right: -1px;
-  background-size: 24px;
   outline: none;
-  cursor: pointer;
   box-sizing: border-box;
+}
+#toolbar input[type=button] {
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-image: url(icons/actions.png);
+  cursor: pointer;
+}
+#toolbar input[type=text],
+#toolbar input[type=search] {
+  text-indent: 3px;
 }
 #toolbar input {
   font-size: 11px;
@@ -56,6 +62,11 @@ body {
   }
   colgroup col[data-id="authors"] {
     width: 100px;
+  }
+}
+@media (max-width: 950px) {
+  #matched {
+    display: none;
   }
 }
 #toolbar .list:hover,

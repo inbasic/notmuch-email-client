@@ -42,6 +42,13 @@ webext.runtime.on('message', (request, sender) => {
 {
   const onClicked = () => webext.tabs.single({
     url: '/data/client/index.html'
+  }).then(({tab, method}) => {
+    // update the list.js if tab is already open
+    if (method === 'update') {
+      chrome.tabs.sendMessage(tab.id, {
+        method: 'list.refresh'
+      });
+    }
   });
   webext.browserAction.on('clicked', onClicked);
   webext.notifications.on('clicked', notificationId => {

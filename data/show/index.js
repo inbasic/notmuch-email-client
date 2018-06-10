@@ -11,6 +11,14 @@
   }
 }
 
+var get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'notmuch.show',
+  query: 'id:' + id,
+  part: obj.id,
+  format: 'raw',
+  html: false
+}, resolve));
+
 var args = location.search.replace('?', '').split('&').reduce((p, c) => {
   const [key, value] = c.split('=');
   p[key] = decodeURIComponent(value);
@@ -24,7 +32,8 @@ if (args.query) {
     entire: false
   }, r => {
     try {
-      parse(r.content);
+      const parts = parse(r.content);
+      parse.insert(parts);
       document.body.dataset.loading = false;
 
       // mark as read
@@ -48,3 +57,23 @@ if (args.query) {
 else {
   document.body.textContent = 'No query!';
 }
+
+document.addEventListener('click', ({target}) => {
+  const cmd = target.dataset.cmd;
+
+  if (cmd === 'attachment') {
+    get(target.dataset.id, target.attachment).then(url => chrome.downloads.download({
+      url,
+      filename: target.attachment.filename
+    }));
+  }
+  else if (cmd === 'close-me') {
+    if (window.top !== window) {
+      window.top.api.popup.hide();
+    }
+  }
+  else if (cmd === 'load-remote') {
+    const iframe = target.closest('table').nextElementSibling;
+    parse.reload(iframe);
+  }
+});

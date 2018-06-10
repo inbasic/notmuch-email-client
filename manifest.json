@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.3.4",
+  "version": "0.3.5",
   "name": "Email Client for Notmuch",
   "description": "a powerful email client based on notmuch offline email indexing tool",
 

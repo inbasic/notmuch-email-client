@@ -148,6 +148,11 @@ document.addEventListener('click', async e => {
     location.reload();
   }
 });
+chrome.runtime.onMessage.addListener(request => {
+  if (request.method === 'list.refresh') {
+    location.reload();
+  }
+});
 
 // commands
 document.getElementById('toolbar').addEventListener('click', ({target}) => {
@@ -173,6 +178,19 @@ document.getElementById('toolbar').addEventListener('click', ({target}) => {
   if (cmd && cmd.startsWith('select-')) {
     view.emit('update-toolbar');
   }
+});
+document.getElementById('matched').addEventListener('input', ({target}) => {
+  const empty = target.value === '';
+  const value = target.value.toLowerCase().split(/\s+or\s+/).filter(s => s);
+  [...document.querySelectorAll('#root tr')].forEach(tr => {
+    if (empty) {
+      tr.dataset.selected = false;
+    }
+    else {
+      tr.dataset.selected = value.some(s => tr.textContent.toLowerCase().indexOf(s) !== -1);
+    }
+  });
+  view.emit('update-toolbar');
 });
 
 view.on('selection-changed', () => {

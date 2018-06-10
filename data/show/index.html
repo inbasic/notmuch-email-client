@@ -10,6 +10,51 @@
   </head>
 
   <body data-loading=true>
+    <template id="headers">
+      <table class="headers">
+        <tbody>
+          <tr>
+            <td>ID</td>
+            <td data-id="id"></td>
+          </tr>
+          <tr>
+            <td>Filename</td>
+            <td data-id="filename"></td>
+          </tr>
+          <tr>
+            <td>Date</td>
+            <td data-id="date"></td>
+          </tr>
+          <tr>
+            <td>From</td>
+            <td data-id="from"></td>
+          </tr>
+          <tr>
+            <td>Subject</td>
+            <td data-id="subject"></td>
+          </tr>
+          <tr>
+            <td>To</td>
+            <td data-id="to"></td>
+          </tr>
+          <tr>
+            <td>Tags</td>
+            <td data-id="tags"></td>
+          </tr>
+          <tr>
+            <td>Attachments</td>
+            <td>
+              <div style="display: flex; align-items: center;">
+                <div data-id="attachments" style="flex: 1"></div>
+                <input type="button" id="remote" value="Load Remote" data-cmd="load-remote">
+                <input type="button" value="Close" data-cmd="close-me">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
+    <div id=content></div>
     <script src="parse.js"></script>
     <script src="index.js"></script>
   </body>

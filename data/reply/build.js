@@ -38,7 +38,21 @@ if (args.query) {
     query: args.query
   }, r => {
     try {
-      parse(r.content, true, document.getElementById('content'));
+      const parts = parse(r.content);
+      const body = document.getElementById('content');
+      parts.forEach(part => part.bodies.forEach(o => {
+        if (o.text) {
+          body.appendChild(Object.assign(document.createElement('pre'), {
+            textContent: o.text.trim()
+          }));
+        }
+        else if (o.html) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(o.html, 'text/html');
+          [...doc.childNodes].filter(node => node.nodeType !== 10)
+            .forEach(node => body.appendChild(node));
+        }
+      }));
 
       chrome.runtime.sendMessage({
         method: 'notmuch.reply',
@@ -63,7 +77,7 @@ if (args.query) {
         info.textContent = `
 On ${(new Date(original.timestamp * 1000)).toLocaleString()}, ${original.headers.From} wrote:
 `;
-        info.focus();
+        document.getElementById('From').focus();
       });
     }
     catch (e) {
