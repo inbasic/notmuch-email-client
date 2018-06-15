@@ -47,7 +47,7 @@ api.tree.select = id => api.e.tree.contentWindow.tree.select(id);
 api.popup = {};
 {
   const hide = () => {
-    api.e.popup.querySelector('iframe').src = 'about:blank';
+    window.frames['popup'].location = 'about:blank';
     api.e.popup.classList.add('hide');
   };
   document.addEventListener('click', ({target}) => {
@@ -58,7 +58,7 @@ api.popup = {};
   api.popup.hide = hide;
 }
 api.popup.show = src => {
-  api.e.popup.querySelector('iframe').src = src;
+  window.frames['popup'].location = src;
   api.e.popup.classList.remove('hide');
 };
 // display errors

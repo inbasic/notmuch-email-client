@@ -93,15 +93,19 @@ parse.iframe = ({
   else {
     part = iframe.part;
   }
-  iframe.sandbox = 'allow-same-origin';
+  iframe.sandbox = 'allow-same-origin allow-popups';
   iframe.style.height = '30px';
   const onload = () => {
     const doc = iframe.contentDocument;
     const body = doc.body;
 
-    const ro = new ResizeObserver(() => {
-      iframe.style.height = (doc.documentElement.scrollHeight + 20) + 'px';
-    });
+    const resize = () => {
+      iframe.style.height = doc.documentElement.scrollHeight + 'px';
+    };
+
+    const ro = typeof ResizeObserver !== 'undefined' ?
+      new ResizeObserver(resize) :
+      {observe: () => {}, disconnect: () => {}};
     ro.observe(doc.scrollingElement);
 
     let remote = false;
@@ -139,6 +143,7 @@ parse.iframe = ({
           .forEach(node => body.appendChild(node));
         //
       }
+      resize();
     });
     if (body.children.length === 0) {
       body.classList.add('empty');
