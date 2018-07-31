@@ -8,7 +8,7 @@ config.log = false; // number of entries per page
 config.sort = 'flagged'; // how the list is shown: flagged, subject,subject-za
 
 config.delay = 2; // seconds
-config.interval = 5; //minutes
+config.interval = 5; // minutes
 config.command = '';
 
 // reserved: 'trash', 'spam', 'mark-as-read', 'mark-as-unread', 'archive'

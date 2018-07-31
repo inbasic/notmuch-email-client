@@ -14,6 +14,7 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
     'native.files.list': native.files.list,
     'native.files.move': native.files.move,
     'native.files.file': native.files.file,
+    'native.files.read': native.files.read,
     'native.files.remove.file': native.files.remove.file,
     'native.files.remove.directory': native.files.remove.directory
   })[request.method];

@@ -215,10 +215,16 @@ view.on('refresh', (count = false) => chrome.runtime.sendMessage(Object.assign({
     older.disabled = older.start < 0;
     // update commands
     const sds = document.querySelectorAll('#root [data-selected=true]');
-    document.body.dataset.selected =  sds.length !== 0;
-    document.body.dataset.single =  sds.length === 1;
+    document.body.dataset.selected = sds.length !== 0;
+    document.body.dataset.single = sds.length === 1;
     // update total count
     document.getElementById('total').textContent = args.total;
+    // mark as read/unread
+    const cmd = [...document.querySelectorAll('tr[data-selected="true"]')].some(tr => tr.dataset.unread === 'true') ?
+      'mark-as-read' : 'mark-as-unread';
+    const input = document.getElementById('mark-as');
+    input.dataset.cmd = cmd;
+    input.value = cmd === 'mark-as-read' ? 'Mark as read' : 'Mark as unread';
     // selection-changed
     view.emit('selection-changed');
   });

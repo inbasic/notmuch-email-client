@@ -19,14 +19,14 @@ var parse = function(json) {
           return step(body);
         }
       }
-      if (type.startsWith('multipart/')) {
+      if (type.startsWith('multipart/') || type === 'message/rfc822') {
         return step(json.content);
       }
     }
     // can we extract headers
     if (json.body) {
       const flat = a => a.reduce((acc, val) => (Array.isArray(val) ? acc.concat(flat(val)) : acc.concat(val)), []);
-      const tmp = flat(step(json.body));
+      const tmp = flat(step(json.body)).filter(a => a);
       parts.push({
         headers: Object.assign(json.headers, {
           id: json.id,
@@ -51,10 +51,13 @@ var parse = function(json) {
       }
       console.log('missed section', json);
     }
-    else {
+    else if (json['content-disposition'] === 'attachment') {
       return {
         attachment: json
       };
+    }
+    else {
+      console.log('missed section', json);
     }
   }
   step(json);
@@ -165,34 +168,40 @@ parse.insert = parts => {
   if (part) {
     // insert headers
     const headers = part.headers;
-    const t = document.getElementById('headers');
-    const clone = document.importNode(t.content, true);
-    const table = clone.querySelector('table');
-    clone.querySelector('[data-id=id]').textContent = headers.id;
-    clone.querySelector('[data-id=filename]').textContent =
-      (Array.isArray(headers.filename) ? headers.filename : [headers.filename]).join(', ');
-    clone.querySelector('[data-id=date]').textContent = headers.Date;
-    clone.querySelector('[data-id=from]').textContent = headers.From;
-    clone.querySelector('[data-id=subject]').textContent = headers.Subject;
-    clone.querySelector('[data-id=to]').textContent = headers.To;
-    clone.querySelector('[data-id=tags]').textContent = headers.tags.join(', ');
-    // attachments
-    part.attachments.forEach(({attachment}) => {
-      const span = document.createElement('span');
-      span.attachment = attachment;
-      span.href = '#';
-      span.dataset.id = part.headers.id;
-      span.dataset.cmd = 'attachment';
-      span.textContent = `${attachment.filename} (${parse.humanFileSize(attachment['content-length'])})`;
-      clone.querySelector('[data-id=attachments]').appendChild(span);
-    });
+    if (headers.id) {
+      const t = document.getElementById('headers');
+      const clone = document.importNode(t.content, true);
+      const table = clone.querySelector('table');
+      clone.querySelector('[data-id=id]').textContent = headers.id;
+      clone.querySelector('[data-id=filename]').textContent =
+        (Array.isArray(headers.filename) ? headers.filename : [headers.filename]).join(', ');
+      clone.querySelector('[data-id=date]').textContent = headers.Date;
+      clone.querySelector('[data-id=from]').textContent = headers.From;
+      clone.querySelector('[data-id=subject]').textContent = headers.Subject;
+      clone.querySelector('[data-id=to]').textContent = headers.To;
+      clone.querySelector('[data-id=tags]').textContent = headers.tags.join(', ');
+      // attachments
+      part.attachments.forEach(({attachment}) => {
+        const span = document.createElement('span');
+        span.attachment = attachment;
+        span.href = '#';
+        span.dataset.id = part.headers.id;
+        span.dataset.cmd = 'attachment';
+        span.textContent = `${attachment.filename} (${parse.humanFileSize(attachment['content-length'])})`;
+        clone.querySelector('[data-id=attachments]').appendChild(span);
+      });
 
-    document.getElementById('content').appendChild(clone);
+      document.getElementById('content').appendChild(clone);
 
-    return parse.iframe({part}, remote => {
-      table.dataset.type = remote ? 'remote' : 'local';
+      return parse.iframe({part}, remote => {
+        table.dataset.type = remote ? 'remote' : 'local';
+        parse.insert(parts);
+      });
+    }
+    else {
+      console.log('part cannot be displayed', part);
       parse.insert(parts);
-    });
+    }
   }
 };
 parse.reload = iframe => parse.iframe({

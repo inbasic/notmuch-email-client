@@ -27,7 +27,7 @@
         <input type="button" data-cmd="archive" class="selection">
         <input type="button" data-cmd="spam" class="selection">
         <input type="button" data-cmd="trash" class="selection">
-        <input type="button" data-cmd="mark-as-read" value="Mark as read" class="selection no-icon">
+        <input type="button" data-cmd="mark-as-read" value="Mark as read" class="selection no-icon" id="mark-as">
       </div>
 
       <div>
@@ -90,10 +90,10 @@
           <tr data-unread=true>
             <td data-id="active">
               <input type="radio" name="entry">
-              <label></label>
+              <label data-cmd="fake-command"></label> <!-- fake command is to prevent show module to open the thread -->
             </td>
             <td data-id="select">
-              <label></label>
+              <label data-cmd="fake-command"></label> <!-- fake command is to prevent show module to open the thread -->
             </td>
             <td data-id="star" data-cmd="toggle-flag"></td>
             <td data-id="stat">-</td>

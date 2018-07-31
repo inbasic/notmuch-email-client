@@ -25,12 +25,31 @@ api.list = {};
 {
   const list = document.getElementById('list');
   api.list.show = async({query, total = 0}) => {
-    const {page, sort} = await webext.storage.get({
-      page: 50,
-      sort: 'flagged'
-    });
-    list.src = `/data/list/index.html?query=${encodeURIComponent(query)}&total=${total}&limit=${page}&sort=${sort}`;
-    api.search.insert(query);
+    query = Array.isArray(query) ? query : [query];
+    // remove old unused list views
+    // the first iframe is not a data-id=list
+    [...document.querySelectorAll('[data-id=list]')].slice(query.length - 1).forEach(f => f.remove());
+    // add new ones
+    for (let i = 0; i < query.length; i += 1) {
+      const iframe = i === 0 ? list : (() => {
+        let iframe = document.querySelector(`iframe[data-index="${i}"]`);
+        if (iframe) {
+          return iframe;
+        }
+        iframe = document.createElement('iframe');
+        iframe.dataset.id = 'list';
+        iframe.dataset.index = i;
+        list.parentElement.appendChild(iframe);
+        return iframe;
+      })();
+      const {page, sort} = await webext.storage.get({
+        page: 50,
+        sort: 'flagged'
+      });
+      iframe.src = '/data/list/index.html?query=' +
+        `${encodeURIComponent(query[i])}&total=${total}&limit=${page}&sort=${sort}`;
+      api.search.insert(query[i]);
+    }
   };
   api.list.emit = name => list.contentWindow.view.emit(name);
 }

@@ -13,7 +13,7 @@ utils.clipboard.copy = str => new Promise(resolve => {
   document.execCommand('Copy', false, null);
 });
 
-utils.notify = async(message) => {
+utils.notify = async message => {
   chrome.runtime.getBackgroundPage(bg => bg.webext.notifications.create({message}));
 };
 

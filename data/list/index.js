@@ -28,7 +28,26 @@ document.addEventListener('click', ({target}) => {
     }
   }
 });
-
+// shift + click a checkbox to multi-select
+document.getElementById('root').addEventListener('mousedown', e => {
+  if (e.shiftKey && e.target.closest('[data-id="select"]')) {
+    const input = document.querySelector('#root input[type=radio]:checked');
+    if (input) {
+      const dtr = e.target.closest('tr');
+      const str = input.closest('tr');
+      if (dtr !== str) {
+        let on = false;
+        [...document.querySelectorAll('#root tr')].filter(tr => {
+          if (tr === str || tr === dtr) {
+            on = !on;
+            return tr === str;
+          }
+          return on;
+        }).forEach(tr => tr.dataset.selected = true);
+      }
+    }
+  }
+});
 // select, flag and star
 document.getElementById('root').addEventListener('click', e => {
   const target = e.target;
@@ -40,20 +59,16 @@ document.getElementById('root').addEventListener('click', e => {
     tr.querySelector('[data-id=active] input').click();
   }
 
-  if (target.closest('[data-id="select"]')) { // skip checkbox
-    // do with a delay
-    return window.setTimeout(() => {
-      if (e.defaultPrevented === false) {
-        tr.dataset.selected = tr.dataset.selected !== 'true';
-        view.emit('update-toolbar');
-      }
-    }, 50);
+  if (target.closest('[data-id="select"]')) {
+    tr.dataset.selected = tr.dataset.selected !== 'true';
+    view.emit('update-toolbar');
   }
 
   if (cmd === 'toggle-flag') {
     tr.dataset.flagged = tr.dataset.flagged !== 'true';
   }
-  else if (tr && e.isTrusted) {
+  // cmd === undefined -> to prevent remove-tag from opening the show module
+  else if (tr && e.isTrusted && cmd === undefined) {
     const tr = target.closest('tr');
     const thread = tr.dataset.thread;
 

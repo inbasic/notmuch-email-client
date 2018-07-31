@@ -20,6 +20,7 @@ chrome.runtime.sendNativeMessage('com.add0n.node', {
   if (r) {
     document.getElementById('tree').src = '../tree/index.html';
     document.getElementById('search').src = '../search/index.html';
+    document.getElementById('list').src = '../list/empty.html';
   }
   else {
     location.replace('/data/helper/index.html');

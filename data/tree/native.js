@@ -48,3 +48,19 @@ tree.on('maildir', id => {
   });
   api.client.title(id);
 }).if(() => window.top !== window && tree.allow.transmit && args.sandbox !== 'true');
+// smart label
+tree.on('select', id => {
+  const smart = tree.leaf(id).dataset.smart;
+  if (smart) {
+    chrome.runtime.sendMessage({
+      method: 'native.files.read',
+      path: smart
+    }, r => {
+      const {api} = window.top;
+      api.list.show({
+        query: r.content.split('\n').map(r => r.trim()).filter(r => r)
+      });
+      api.client.title('smart label');
+    });
+  }
+});

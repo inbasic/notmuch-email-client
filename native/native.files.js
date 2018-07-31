@@ -99,9 +99,31 @@ native.files.file = ({filename, content}) => webext.runtime.connectNative(native
   `
 }).build();
 
-native.files.remove = {
+native.files.read = ({path}) => webext.runtime.connectNative(native.id, {
+  permissions: ['fs'],
+  args: [path],
+  script: String.raw`
+    /* globals require, push, close, args */
+    const fs = require('fs');
+    fs.readFile(args[0], 'utf8', function(error, content) {
+      if (error) {
+        push({
+          code: 1,
+          error
+        });
+        return close();
+      }
+      push({
+        path: args[0],
+        content,
+        code: 0
+      });
+      close();
+    });
+  `
+}).build();
 
-};
+native.files.remove = {};
 
 native.files.remove.file = ({path}) => webext.runtime.connectNative(native.id, {
   permissions: ['fs'],

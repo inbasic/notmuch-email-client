@@ -1,4 +1,4 @@
-/* globals EventEmitter, VanillaTree, tree */
+/* globals EventEmitter, VanillaTree */
 'use strict';
 
 var args = location.search.replace('?', '').split('&').reduce((p, c) => {
@@ -11,7 +11,7 @@ var tree = new EventEmitter();
 
 {
   const v = new VanillaTree('#root', {
-    placeholder: 'Please wait...',
+    placeholder: 'Please wait...'
   });
 
   // cache
@@ -150,6 +150,9 @@ var tree = new EventEmitter();
           }
           if (target.maildir) {
             tree.emit('maildir', id);
+          }
+          else if (r.files.some(f => f.name === 'query')) {
+            target.dataset.smart = r.files.filter(f => f.name === 'query').shift().path;
           }
           tree.emit('select', id);
         }
