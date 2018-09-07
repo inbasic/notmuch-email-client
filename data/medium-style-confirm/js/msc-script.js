@@ -104,7 +104,7 @@
         dialog.appendChild(overlay);
         dialog.appendChild(content);
         document.body.appendChild(dialog);
-        dialog.style.display = 'block';
+        dialog.style.display = 'flex';
         content.classList.add('msc-confirm--animate');
         if(type === "prompt") {
             input.setAttribute("type", "text");

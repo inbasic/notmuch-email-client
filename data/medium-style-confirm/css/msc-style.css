@@ -27,6 +27,8 @@
     width: 100%;
     height: 100%;
     z-index: 3;
+    align-items: center;
+    justify-content: center;
 }
 .msc-overlay {
     position: fixed;
@@ -70,10 +72,13 @@
     z-index: 21;
     background: #fff;
     opacity: 1.0;
-    max-width: 480px;
     margin: 10% auto 10% auto;
     padding: 40px;
     text-align: center;
+    width: 600px;
+    max-height: 60%;
+    display: flex;
+    flex-direction: column;
 }
 
 @media (max-width: 600px) {
@@ -90,6 +95,7 @@
     font-size: 1.2em;
     margin-bottom: 1em;
     color: #666;
+    overflow: auto;
 }
 .msc-body p {
     margin: 0 0 10px 0;

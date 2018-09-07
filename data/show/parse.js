@@ -51,7 +51,7 @@ var parse = function(json) {
       }
       console.log('missed section', json);
     }
-    else if (json['content-disposition'] === 'attachment') {
+    else if (json['content-disposition'] === 'attachment' || json['content-disposition'] === 'inline') {
       return {
         attachment: json
       };

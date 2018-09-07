@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.3.7",
+  "version": "0.4.0",
   "name": "Email Client for Notmuch",
   "description": "a powerful email client based on notmuch offline email indexing tool",
 
@@ -38,16 +38,7 @@
   "background": {
     "persistent": false,
     "scripts": [
-      "webext/utils/EventEmitter.js",
-      "webext/core/base.js",
-      "webext/core/chrome.storage.js",
-      "webext/core/chrome.runtime.js",
-      "webext/core/chrome.browserAction.js",
-      "webext/core/chrome.contextMenus.js",
-      "webext/core/chrome.notifications.js",
-      "webext/core/chrome.alarms.js",
-      "webext/core/chrome.tabs.js",
-      "webext/core/chrome.idle.js",
+      "webext.js",
       "native/base.js",
       "native/native.exec.js",
       "native/native.files.js",

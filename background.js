@@ -66,7 +66,7 @@ webext.runtime.on('start-up', () => {
   webext.storage.get({
     'version': null,
     'faqs': false,
-    'last-update': 0,
+    'last-update': 0
   }).then(prefs => {
     if (prefs.version ? (prefs.faqs && prefs.version !== version) : true) {
       const now = Date.now();
