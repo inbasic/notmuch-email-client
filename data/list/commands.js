@@ -11,6 +11,21 @@ document.addEventListener('click', async e => {
   const {target, shiftKey} = e;
   const cmd = target.dataset.cmd;
 
+  // to prevent unwanted actions while previous action is yet in progress
+  if (
+    cmd === 'mark-as-read' ||
+    cmd === 'mark-as-unread' ||
+    cmd === 'add-tags' ||
+    cmd === 'trash' ||
+    cmd === 'spam' ||
+    cmd === 'archive' ||
+    cmd === 'move-ok'
+  ) {
+    if (view.threads().length === 0) {
+      return console.log('cannot act on an empty list');
+    }
+  }
+
   if (
     cmd === 'mark-as-read' ||
     cmd === 'mark-as-unread' ||

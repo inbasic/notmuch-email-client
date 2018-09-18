@@ -66,6 +66,9 @@ if (args.plugins !== 'false') {
     });
 
     if (cmd === 'user-action') {
+      if (view.threads().length === 0) {
+        return console.log('cannot act on an empty list');
+      }
       const threads = view.threads().map(id => 'thread:' + id).join(' ');
       (threads.length ? utils.files(threads) : Promise.resolve([])).then(files => {
         action = action
