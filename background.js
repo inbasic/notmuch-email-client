@@ -1,6 +1,15 @@
 /* globals native, webext */
 'use strict';
 
+const ports = [];
+chrome.runtime.onConnect.addListener(port => {
+  ports.push(port);
+  port.onDisconnect.addListener(() => {
+    const index = ports.indexOf(port);
+    ports.splice(index, 1);
+  });
+});
+
 //
 chrome.runtime.onMessage.addListener((request, sender, response) => {
   const command = ({
@@ -41,16 +50,25 @@ webext.runtime.on('message', (request, sender) => {
 
 // browser-action
 {
-  const onClicked = () => webext.tabs.single({
-    url: '/data/client/index.html'
-  }).then(({tab, method}) => {
-    // update the list.js if tab is already open
-    if (method === 'update') {
-      chrome.tabs.sendMessage(tab.id, {
+  const onClicked = () => {
+    if (ports.length) {
+      const {id, windowId} = ports[0].sender.tab;
+      chrome.tabs.update(id, {
+        active: true
+      }, () => chrome.tabs.sendMessage(id, {
         method: 'list.refresh'
+      }));
+      chrome.windows.update(windowId, {
+        focused: true
       });
     }
-  });
+    else {
+      chrome.tabs.create({
+        url: '/data/client/index.html'
+      });
+    }
+  };
+
   webext.browserAction.on('clicked', onClicked);
   webext.notifications.on('clicked', notificationId => {
     webext.notifications.clear(notificationId);
@@ -59,36 +77,28 @@ webext.runtime.on('message', (request, sender) => {
 }
 
 // FAQs and Feedback
-webext.runtime.on('start-up', () => {
-  const {name, version, homepage_url} = webext.runtime.getManifest();
-  const page = homepage_url; // eslint-disable-line camelcase
-  // FAQs
-  webext.storage.get({
-    'version': null,
-    'faqs': false,
-    'last-update': 0
-  }).then(prefs => {
-    if (prefs.version ? (prefs.faqs && prefs.version !== version) : true) {
-      const now = Date.now();
-      const doUpdate = (now - prefs['last-update']) / 1000 / 60 / 60 / 24 > 30;
-      webext.storage.set({
-        version,
-        'last-update': doUpdate ? Date.now() : prefs['last-update']
-      }).then(() => {
-        // do not display the FAQs page if last-update occurred less than 30 days ago.
-        if (doUpdate) {
-          const p = Boolean(prefs.version);
-          webext.tabs.create({
+{
+  const {onInstalled, setUninstallURL, getManifest} = chrome.runtime;
+  const {name, version} = getManifest();
+  const page = getManifest().homepage_url;
+  onInstalled.addListener(({reason, previousVersion}) => {
+    chrome.storage.local.get({
+      'faqs': true,
+      'last-update': 0
+    }, prefs => {
+      if (reason === 'install' || (prefs.faqs && reason === 'update')) {
+        const doUpdate = (Date.now() - prefs['last-update']) / 1000 / 60 / 60 / 24 > 45;
+        if (doUpdate && previousVersion !== version) {
+          chrome.tabs.create({
             url: page + '?version=' + version +
-              '&type=' + (p ? ('upgrade&p=' + prefs.version) : 'install'),
-            active: p === false
+              (previousVersion ? '&p=' + previousVersion : '') +
+              '&type=' + reason,
+            active: reason === 'install'
           });
+          chrome.storage.local.set({'last-update': Date.now()});
         }
-      });
-    }
+      }
+    });
   });
-  // Feedback
-  webext.runtime.setUninstallURL(
-    page + '?rd=feedback&name=' + name + '&version=' + version
-  );
-});
+  setUninstallURL(page + '?rd=feedback&name=' + encodeURIComponent(name) + '&version=' + version);
+}

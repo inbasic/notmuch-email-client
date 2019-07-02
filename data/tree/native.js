@@ -42,10 +42,11 @@ webext.runtime.on('message', ({query, unread, total}) => {
 // update the list view and client's title if available
 tree.on('maildir', id => {
   const {api} = window.top;
+
   api.list.show({
     query: 'path:' + id + '/**',
     total: tree.leaf(id).total
-  });
+  }, 'maildir');
   api.client.title(id);
 }).if(() => window.top !== window && tree.allow.transmit && args.sandbox !== 'true');
 // smart label
@@ -59,7 +60,7 @@ tree.on('select', id => {
       const {api} = window.top;
       api.list.show({
         query: r.content.split('\n').map(r => r.trim()).filter(r => r)
-      });
+      }, 'smart');
       api.client.title('smart label');
     });
   }

@@ -1,20 +1,18 @@
 {
   "manifest_version": 2,
-  "version": "0.4.1",
-  "name": "Email Client for Notmuch",
-  "description": "a powerful email client based on notmuch offline email indexing tool",
+  "version": "0.4.3",
+  "name": "Open Email Client",
+  "description": "a powerful IMAP/POP3 email client based on notmuch indexing engine",
 
   "permissions": [
     "nativeMessaging",
     "downloads",
-    "tabs",
     "storage",
     "contextMenus",
     "notifications",
     "alarms",
     "idle",
-    "clipboardWrite",
-    "https://api.github.com/repos/andy-portmen/native-client/releases/latest"
+    "clipboardWrite"
   ],
 
   "offline_enabled": true,
@@ -23,12 +21,14 @@
     "default_icon": {
       "16": "data/icons/gray/16.png",
       "19": "data/icons/gray/19.png",
-      "32": "data/icons/gray/32.png"
+      "32": "data/icons/gray/32.png",
+      "48": "data/icons/gray/48.png"
     }
   },
 
   "icons": {
     "16": "data/icons/gray/16.png",
+    "19": "data/icons/gray/19.png",
     "32": "data/icons/gray/32.png",
     "48": "data/icons/gray/48.png",
     "64": "data/icons/gray/64.png",
@@ -60,11 +60,5 @@
     "page": "data/options/index.html",
     "chrome_style": true
   },
-  "homepage_url": "http://add0n.com/notmuch-email-client.html",
-  "applications": {
-    "gecko": {
-      "id": "{8e409c88-e088-4ce8-8506-5a91e6c502a8}",
-      "strict_min_version": "52.0"
-    }
-  }
+  "homepage_url": "https://add0n.com/notmuch-email-client.html"
 }

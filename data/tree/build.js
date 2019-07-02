@@ -30,7 +30,7 @@ var tree = new EventEmitter();
   tree.separate.reg = '[./\\\\]';
   tree.join = (...parts) => parts.join('/').replace(/\/\//g, '/');
 
-  tree.browse = path => new Promise((resolve, reject) => {
+  tree.browse = (path, silent = false) => new Promise((resolve, reject) => {
     // remove selection
     tree.select(false);
 
@@ -43,7 +43,9 @@ var tree = new EventEmitter();
         tree.allow.transmit = root.length === 0;
 
         try {
-          tree.select(id, root.length);
+          if (!silent || root.length !== 0) {
+            tree.select(id, root.length);
+          }
         }
         catch (e) {
           reject(e);

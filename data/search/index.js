@@ -11,18 +11,31 @@
   }
 }
 
-document.querySelector('form').addEventListener('submit', e => {
-  e.preventDefault();
-  const query = document.getElementById('search').value;
+{
+  const search = document.getElementById('search');
+  const {api} = window.top;
+  const form = document.querySelector('form');
 
-  if (query && window.top !== window) {
-    const {api} = window.top;
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    e.stopPropagation();
 
-    api.tree.select(false);
-    api.list.show({query});
+    if (search.value && window.top !== window) {
+      api.tree.select(false);
+      api.list.show({
+        query: search.value
+      }, 'search');
 
-    utils.notmuch.count(query);
+      utils.notmuch.count(search.value);
 
-    api.client.title('Search results for "' + query + '"');
+      api.client.title('Search results for "' + search.value + '"');
+    }
+  });
+  const query = api.args.get('query');
+  if (query) {
+    search.value = decodeURIComponent(query);
+    api.list.show({
+      query: search.value
+    }, 'search');
   }
-});
+}

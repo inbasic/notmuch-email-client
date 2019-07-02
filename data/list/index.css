@@ -50,6 +50,9 @@ body {
 #toolbar input[type=search] {
   text-indent: 3px;
 }
+#toolbar input[type=search]:focus-within {
+  width: 200px;
+}
 #toolbar input {
   font-size: 11px;
 }
@@ -69,6 +72,13 @@ body {
     display: none;
   }
 }
+@media (max-width: 700px) {
+  [data-cmd="mark-as-read"],
+  [data-cmd="mark-as-unread"] {
+    display: none;
+  }
+}
+
 #toolbar .list:hover,
 #toolbar input:hover {
   opacity: 1;
@@ -211,7 +221,9 @@ body[data-single=false] .single {
 #toolbar #stat {
   white-space: nowrap;
 }
-
+#toolbar #stat span {
+  padding-left: 5px;
+}
 table {
   table-layout: fixed;
   border-collapse: collapse;

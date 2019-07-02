@@ -1,5 +1,6 @@
-/* globals EventEmitter, webext, utils */
+/* globals EventEmitter, webext */
 'use strict';
+
 
 var api = new EventEmitter();
 api.e = {
@@ -7,6 +8,12 @@ api.e = {
   popup: document.getElementById('popup'),
   search: document.getElementById('search')
 };
+
+chrome.runtime.connect({
+  name: 'client'
+});
+
+api.args = new URLSearchParams(location.search);
 
 /* use actions */
 api.user = {};
@@ -24,7 +31,7 @@ api.search.insert = query => {
 api.list = {};
 {
   const list = document.getElementById('list');
-  api.list.show = async({query, total = 0}) => {
+  api.list.show = async ({query, total = 0}, reason) => {
     query = Array.isArray(query) ? query : [query];
     // remove old unused list views
     // the first iframe is not a data-id=list
@@ -49,6 +56,13 @@ api.list = {};
       iframe.src = '/data/list/index.html?query=' +
         `${encodeURIComponent(query[i])}&total=${total}&limit=${page}&sort=${sort}`;
       api.search.insert(query[i]);
+
+      if (reason === 'search') {
+        history.replaceState({}, '', '?query=' + encodeURIComponent(query));
+      }
+      else {
+        history.replaceState({}, '', '?');
+      }
     }
   };
   api.list.emit = name => list.contentWindow.view.emit(name);

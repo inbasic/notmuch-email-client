@@ -313,28 +313,6 @@ webext.tabs.current = () => new Promise(resolve => chrome.tabs.query({
   currentWindow: true
 }, ([tab]) => resolve(tab)));
 
-webext.tabs.single = createProperties => new Promise(resolve => chrome.tabs.query({
-  url: chrome.runtime.getURL(createProperties.url)
-}, tabs => {
-  if (tabs && tabs.length) {
-    chrome.tabs.update(tabs[0].id, {
-      active: true
-    }, () => resolve({
-      tab: tabs[0],
-      method: 'update'
-    }));
-    chrome.windows.update(tabs[0].windowId, {
-      focused: true
-    });
-  }
-  else {
-    return webext.tabs.create(createProperties, tab => resolve({
-      tab,
-      method: 'create'
-    }));
-  }
-}));
-
 webext.tabs.execute = {};
 webext.tabs.execute.script = (tabId, details) => new Promise((resolve, reject) => {
   chrome.tabs.executeScript(tabId, details, arr => {
