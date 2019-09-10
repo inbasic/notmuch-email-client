@@ -2,6 +2,8 @@
 'use strict';
 
 native.policy = (tabId, query) => {
+  // native.log('native.policy', tabId, query);
+
   const post = (r, q = query) => {
     chrome.tabs.sendMessage(tabId, {
       method: 'notmuch.count.response',

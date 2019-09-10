@@ -1,6 +1,7 @@
 'use strict';
 
-var config = {};
+const config = {};
+window.config = config;
 
 config.page = 50; // number of entries per page
 config.log = false; // number of entries per page
@@ -21,4 +22,12 @@ config.archive = {
 config.reply = {
   action: '',
   accounts: []
+};
+
+config.cache = true; // try to cache command outputs instead of running the native
+
+config.fake = {
+  'mark-as-read': 'read',
+  'mark-as-unread': 'unread',
+  'open': 'read'
 };

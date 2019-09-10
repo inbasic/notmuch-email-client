@@ -69,15 +69,22 @@ view.update = (entry, parent) => {
   parent.querySelector('[data-id="date"]').textContent = entry['date_relative'];
   parent.querySelector('[data-id="tags"]').textContent = '';
   entry.tags
-  .filter(t => t !== 'new' && t !== 'unread' && t !== 'flagged')
-  .forEach(tag => {
-    const t = document.getElementById('tag');
-    const clone = document.importNode(t.content, true);
-    clone.querySelector('span').textContent = tag;
-    clone.querySelector('div').dataset.tag = tag;
-    parent.querySelector('[data-id="tags"]').appendChild(clone);
-  });
+    .filter(t => t !== 'new' && t !== 'unread' && t !== 'flagged')
+    .forEach(tag => {
+      const t = document.getElementById('tag');
+      const clone = document.importNode(t.content, true);
+      clone.querySelector('span').textContent = tag;
+      clone.querySelector('div').dataset.tag = tag;
+      parent.querySelector('[data-id="tags"]').appendChild(clone);
+    });
   parent.dataset.tags = entry.tags.join(',');
+};
+
+view.fake = {
+  list: () => [...document.querySelectorAll('tr[data-selected="true"]')],
+  remove: () => view.fake.list().map(tr => tr.remove()),
+  read: () => view.fake.list().map(tr => tr.dataset.unread = false),
+  unread: () => view.fake.list().map(tr => tr.dataset.unread = true)
 };
 
 {

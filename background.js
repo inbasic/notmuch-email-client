@@ -37,7 +37,9 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
       }
       catch (e) {}
       chrome.runtime.lastError;
-    }).catch(error => response({error}));
+    }).catch(error => {
+      response({error});
+    });
 
     return true;
   }

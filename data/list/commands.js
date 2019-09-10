@@ -9,7 +9,7 @@ view.ids = () => [...document.querySelectorAll('tr[data-selected="true"]')]
 
 document.addEventListener('click', async e => {
   const {target, shiftKey} = e;
-  const cmd = target.dataset.cmd;
+  const {cmd} = target.dataset;
 
   // to prevent unwanted actions while previous action is yet in progress
   if (
@@ -25,6 +25,27 @@ document.addEventListener('click', async e => {
       return console.log('cannot act on an empty list');
     }
   }
+
+  // fake actions
+  if (view.threads().length && cmd) {
+    utils.storage.get(config).then(prefs => {
+      const fake = e.target.dataset.fake || prefs.fake[cmd] || '';
+
+      if (fake.indexOf('hide') !== -1) {
+        view.fake.remove();
+      }
+
+      if (fake.indexOf('unread') !== -1) {
+        view.fake.unread();
+      }
+      else if (fake.indexOf('read') !== -1) {
+        view.fake.read();
+      }
+
+      view.emit('update-toolbar');
+    });
+  }
+
 
   if (
     cmd === 'mark-as-read' ||

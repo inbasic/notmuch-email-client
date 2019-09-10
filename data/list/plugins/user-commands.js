@@ -16,7 +16,7 @@ if (args.plugins !== 'false') {
       if (prefs[command] === undefined) {
         return console.log(command, 'is ignored (not defined)');
       }
-      const {action, name, classList = [], alert, warn} = prefs[command];
+      const {action, name, classList = [], alert, warn, fake = ''} = prefs[command];
       const exists = document.querySelector(`[data-cmd="${command}"]`);
       const li = exists ? exists : document.createElement('li');
 
@@ -24,7 +24,8 @@ if (args.plugins !== 'false') {
         action: action,
         cmd: 'user-action',
         alert: alert || '',
-        warn: warn || ''
+        warn: warn || '',
+        fake
       });
       if (exists) {
         li.dataset.ocmd = command;
@@ -38,15 +39,15 @@ if (args.plugins !== 'false') {
   });
 
   document.addEventListener('click', ({target}) => {
-    const {cmd, alert, warn} = target.dataset;
+    const {cmd, alert, warn, fake = ''} = target.dataset;
     let action = target.dataset.action;
 
     const perform = () => utils.native.exec(action).then(r => {
-      console.log(r);
+      console.log('user-action output', r);
       if (r.code !== 0 && alert === 'true' && window.top !== window) {
         window.top.api.user.alert({
-          title: 'User Action Error',
-          body: r.error.stderr
+          title: 'User-action Error',
+          body: action + '\n\n' + r.error.stderr
         });
       }
       // select all threads returned by the executable
@@ -95,7 +96,7 @@ if (args.plugins !== 'false') {
         else {
           window.alert('"action" is empty! Use the options page to fix this.');
         }
-      })
+      });
     }
   });
 }

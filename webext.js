@@ -169,12 +169,28 @@ webext.runtime.connectNative = (id, message) => {
     onMessage: c => channel.onMessage.addListener(c),
     postMessage: o => channel.postMessage(o),
     build: () => new Promise((resolve, reject) => {
+      let stdout = '';
+      let stderr = '';
+
       channel.onDisconnect.addListener(() => reject(new Error('channel is broken')));
       channel.onMessage.addListener(r => {
+        if (r.stderr) {
+          stderr += r.stderr;
+        }
+        if (r.stdout) {
+          stdout += r.stdout;
+        }
         if (r && r.code === 0) {
           r.responses = responses;
           channel.disconnect();
           resolve(r);
+        }
+        if (r && (stderr === '' && r.stdout && r.stdout.indexOf && r.stdout.indexOf('[fake-resolve]') !== -1)) {
+          resolve(Object.assign({
+            responses,
+            stdout,
+            code: 0
+          }, r));
         }
         else if (r && isNaN(r.code) === false) {
           channel.disconnect();

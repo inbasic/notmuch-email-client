@@ -2,6 +2,7 @@
 'use strict';
 
 native.notmuch.reply = ({query, replyTo = 'all'}) => {
+  native.log('native.notmuch.reply', query, replyTo);
   query = native.notmuch.clean(query, ['offset', 'reply-to']);
 
   return webext.runtime.connectNative(native.id, {

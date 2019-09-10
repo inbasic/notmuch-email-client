@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "version": "0.4.3",
+  "version": "0.4.7",
   "name": "Open Email Client",
-  "description": "a powerful IMAP/POP3 email client based on notmuch indexing engine",
+  "description": "a powerful IMAP and POP3 email client based on notmuch indexing engine",
 
   "permissions": [
     "nativeMessaging",
@@ -38,6 +38,7 @@
   "background": {
     "persistent": false,
     "scripts": [
+      "config.js",
       "webext.js",
       "native/base.js",
       "native/native.exec.js",

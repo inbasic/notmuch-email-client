@@ -4,6 +4,8 @@
 /* use ids for individual mails or threads for entire thread*/
 /* "tabId" is used for the count run */
 native.notmuch.tag = ({threads = [], ids = [], tags, query = '', tabId}) => {
+  native.log('native.notmuch.tag', threads, ids, tags, query, tabId);
+
   const args = ['tag', ...tags];
   args.push(...threads.map(t => 'thread:' + t));
   args.push(...ids.map(t => 'id:' + t));

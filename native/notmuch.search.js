@@ -2,6 +2,7 @@
 'use strict';
 
 native.notmuch.search = ({query, limit = 50, offset = 0, output = 'summary'}) => {
+  native.log('native.notmuch.search', query, limit, offset, output);
   query = native.notmuch.clean(query, ['limit', 'offset', 'format', 'output']);
 
   return webext.runtime.connectNative(native.id, {

@@ -14,6 +14,9 @@ document.getElementById('search-css').value = localStorage.getItem('search-css')
 document.getElementById('client-css').value = localStorage.getItem('client-css') || '';
 document.getElementById('show-css').value = localStorage.getItem('show-css') || '';
 document.getElementById('reply-css').value = localStorage.getItem('reply-css') || '';
+document.getElementById('notmuch').value = localStorage.getItem('notmuch') || '/usr/local/bin/notmuch';
+document.getElementById('wsl').value = localStorage.getItem('wsl') || 'C:\\\\Windows\\\\System32\\\\wsl.exe';
+document.getElementById('log').checked = localStorage.getItem('log') === 'true';
 
 document.getElementById('save').addEventListener('click', () => {
   const info = document.getElementById('info');
@@ -34,6 +37,10 @@ document.getElementById('save').addEventListener('click', () => {
   localStorage.setItem('client-css', document.getElementById('client-css').value);
   localStorage.setItem('show-css', document.getElementById('show-css').value);
   localStorage.setItem('reply-css', document.getElementById('reply-css').value);
+
+  localStorage.setItem('notmuch', document.getElementById('notmuch').value);
+  localStorage.setItem('wsl', document.getElementById('wsl').value);
+  localStorage.setItem('log', document.getElementById('log').checked);
 
   window.setTimeout(() => info.textContent = '', delay);
 });

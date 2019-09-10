@@ -2,19 +2,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Options :: Notmuch Email Client</title>
+    <title>Options :: Open Email Client</title>
   </head>
   <style type="text/css">
     body {
       min-width: 500px;
     }
+    input[type=text],
     textarea {
       width: 100%;
+      box-sizing: border-box;
+    }
+    textarea {
       margin: 3px 0 10px 0;
     }
   </style>
   <body>
-    Configurations (Use <a href="https://jsonformatter.org/json-editor">a JSON editor</a> to edit this section):
+    <table width="100%">
+      <colgroup>
+        <col width="1">
+        <col>
+      </colgroup>
+      <tr>
+        <td>notmuch path<sup>1</sup>:</td>
+        <td><input type="text" id="notmuch"></td>
+      </tr>
+      <tr>
+        <td style="white-space: nowrap;">wsl path (windows only)<sup>1</sup>:</td>
+        <td><input type="text" id="wsl"></td>
+      </tr>
+    </table>
+    Configurations (Use a <a href="https://jsonformatter.org/json-editor">JSON editor</a> to edit this section):
     <textarea rows="10" id="json"></textarea>
     List-view styling:
     <textarea rows="2" id="list-css" placeholder="user-styles for list-view"></textarea>
@@ -29,11 +47,18 @@
     Reply-view styling:
     <textarea rows="2" id="reply-css" placeholder="user-styles for reply-view"></textarea>
     <p>
+      <label><input type="checkbox" id="log"> Show execution log (enable for bug tracking only)</label>
+    </p>
+    <p>
       <input type="button" value="Support Development" id="support">
       <input type="button" value="Export" id="export">
       <input type="button" value="Import" id="import">
       <input type="button" value="Save" id="save">
       <span id="info"></span>
+    </p>
+
+    <p>
+      1. Restart is required.
     </p>
 
     <script src="/webext.js"></script>

@@ -1,8 +1,11 @@
 /* globals webext, native, EventEmitter */
 'use strict';
 
-var badge = new EventEmitter();
+const badge = new EventEmitter();
+window.badge = badge;
 badge.sync = true; // pass true to the external executable to ask for server sync
+
+let oldstdout = '';
 
 badge.setup = () => webext.storage.get({
   delay: 2, // seconds
@@ -10,8 +13,12 @@ badge.setup = () => webext.storage.get({
   command: ''
 }).then(prefs => {
   if (prefs.command) {
+    let title = `In progress (synced: ${badge.sync})`;
+    if (oldstdout) {
+      title = oldstdout.trim() + '\n\n--\n\n' + title;
+    }
     webext.browserAction.setTitle({
-      title: `In progress (synced: ${badge.sync})`
+      title
     });
     webext.alarms.create('periodic-job', {
       when: Date.now() + Math.max(0, prefs.delay) * 1000,
@@ -25,6 +32,7 @@ badge.setup = () => webext.storage.get({
     webext.alarms.clear('periodic-job');
   }
 });
+
 webext.alarms.on('alarm', () => webext.storage.get({
   command: ''
 }).then(({command}) => {
@@ -45,12 +53,24 @@ ${(stdout || r.stderr)}`;
         title: title.trim()
       });
       if (isNaN(count) === false) {
+        oldstdout = stdout;
         badge.emit('count', {
           stdout,
           count
         });
       }
-    }).catch(e => console.error(e));
+      else {
+        oldstdout = '';
+      }
+    }).catch(e => {
+      webext.browserAction.setBadgeText({
+        text: 'E'
+      });
+      webext.browserAction.setTitle({
+        title: e.message || e.stderr || e.stdout || 'no error description'
+      });
+      console.error(e);
+    });
     badge.sync = true; // reset sync status
   }
 })).if(({name}) => name === 'periodic-job');
