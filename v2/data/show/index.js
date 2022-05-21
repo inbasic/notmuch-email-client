@@ -11,15 +11,16 @@
   }
 }
 
-var get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
+const get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
   method: 'notmuch.show',
   query: 'id:' + id,
   part: obj.id,
   format: 'raw',
-  html: false
+  html: false,
+  mime: obj['content-type']
 }, resolve));
 
-var args = location.search.replace('?', '').split('&').reduce((p, c) => {
+const args = location.search.replace('?', '').split('&').reduce((p, c) => {
   const [key, value] = c.split('=');
   p[key] = decodeURIComponent(value);
   return p;

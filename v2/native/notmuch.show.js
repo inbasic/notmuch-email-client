@@ -8,7 +8,8 @@ native.notmuch.show = ({
   entire = true,
   html = true,
   part = null,
-  format = 'json'
+  format = 'json',
+  mime
 }) => {
   native.log('native.notmuch.show', query, body, exclude, entire, html, part, format);
   return webext.runtime.connectNative(native.id, {
@@ -65,7 +66,13 @@ native.notmuch.show = ({
       };
     }
     const bytes = new Uint8Array([].concat(...r.responses.map(({stdout}) => stdout.data)));
-    const blob = new Blob([bytes]);
-    return URL.createObjectURL(blob);
+    const blob = new Blob([bytes], {
+      type: mime
+    });
+    const url = URL.createObjectURL(blob);
+    window.setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 30000);
+    return url;
   });
 };

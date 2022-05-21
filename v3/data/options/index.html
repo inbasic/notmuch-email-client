@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Options :: Open Email Client</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+  <table width="100%">
+    <colgroup>
+      <col width="1">
+      <col>
+    </colgroup>
+    <tr>
+      <td>notmuch path<sup>1</sup>:</td>
+      <td><input type="text" id="notmuch"></td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">wsl path (windows only)<sup>1</sup>:</td>
+      <td><input type="text" id="wsl"></td>
+    </tr>
+  </table>
+  Configurations (Use a <a href="https://jsonformatter.org/json-editor">JSON editor</a> to edit this section):
+  <textarea rows="10" id="json"></textarea>
+  List-view styling:
+  <textarea rows="2" id="list-css" placeholder="user-styles for list-view"></textarea>
+  Tree-view styling:
+  <textarea rows="2" id="tree-css" placeholder="user-styles for tree-view"></textarea>
+  Search-view styling:
+  <textarea rows="2" id="search-css" placeholder="user-styles for search-view"></textarea>
+  Client-view styling:
+  <textarea rows="2" id="client-css" placeholder="user-styles for client-view"></textarea>
+  Show-view styling:
+  <textarea rows="2" id="show-css" placeholder="user-styles for show-view"></textarea>
+  Reply-view styling:
+  <textarea rows="2" id="reply-css" placeholder="user-styles for reply-view"></textarea>
+  <p>
+    <label><input type="checkbox" id="log"> Show execution log (enable for bug tracking only)</label>
+  </p>
+  <p>
+    <input type="button" value="Support Development" id="support">
+    <input type="button" value="Export" id="export">
+    <input type="button" value="Import" id="import">
+    <input type="button" value="Save" id="save">
+    <span id="info"></span>
+  </p>
+
+  <p>
+    1. Restart is required.
+  </p>
+
+  <script src="/webext.js"></script>
+  <script src="/config.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

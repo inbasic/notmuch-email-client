@@ -1,0 +1,72 @@
+html,
+body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-size: 13px;
+  margin: 0;
+}
+body {
+  font-size: 13px;
+  font-family: "Helvetica Neue",Helvetica,sans-serif !important;
+}
+body[data-loading=true] {
+  background: #fff url('/data/images/sl.gif') center center no-repeat;
+}
+table {
+  width: 100%;
+  font-size: 12px;
+  padding: 5px;
+  border-bottom: solid 1px #bfbfbf;
+  background-color: #fcfdfc;
+}
+body>div table:not(:first-of-type) {
+  border-top: solid 1px #bfbfbf;
+}
+/* first column */
+table td:first-child {
+  width: 10px;
+  white-space: nowrap;
+  padding: 0 10px;
+  text-align: right;
+  font-weight: bold;
+  color: #a1a1a1;
+}
+table [data-id="subject"] {
+  font-weight: bold;
+}
+table input {
+  border: solid 1px #c5c5c569;
+  border-radius: 0;
+  cursor: pointer;
+  outline: none;
+  font-size: 11px;
+}
+table input[type=button]:active {
+  opacity: 0.5;
+}
+
+[data-id="id"] {
+  padding-right: 10px;
+  text-align: left;
+}
+[data-id=attachments] span {
+  cursor: pointer;
+  font-weight: bold;
+}
+[data-id=attachments] span:not(:last-child):after {
+  content: ', ';
+}
+
+[data-cmd] {
+  margin-left: 5px;
+}
+table:not([data-type=remote]) #remote {
+  display: none;
+}
+
+iframe {
+  width: 100%;
+  border: none;
+}
