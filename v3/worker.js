@@ -1,15 +1,15 @@
 /* global native, webext */
 
-self.importScripts('config.js');
-self.importScripts('webext.js');
-self.importScripts(
-  'native/base.js', 'native/native.exec.js', 'native/native.files.js', 'native/native.policy.js',
-  'native/notmuch.tag.js', 'native/notmuch.new.js', 'native/notmuch.reply.js', 'native/notmuch.search.js',
-  'native/notmuch.count.js', 'native/notmuch.config.js', 'native/notmuch.show.js'
-);
-self.importScripts('badge.js');
-self.importScripts('notification.js');
-self.importScripts('context.js');
+// self.importScripts('config.js');
+// self.importScripts('webext.js');
+// self.importScripts(
+//   'native/base.js', 'native/native.exec.js', 'native/native.files.js', 'native/native.policy.js',
+//   'native/notmuch.tag.js', 'native/notmuch.new.js', 'native/notmuch.reply.js', 'native/notmuch.search.js',
+//   'native/notmuch.count.js', 'native/notmuch.config.js', 'native/notmuch.show.js'
+// );
+// self.importScripts('badge.js');
+// self.importScripts('notification.js');
+// self.importScripts('context.js');
 
 const localStorage = {
   getItem(name) {

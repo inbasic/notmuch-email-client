@@ -71,27 +71,44 @@ notification.on('notify', ({objs, format}) => {
   }
 });
 
-notification.sound = {
-  play: (src, volume = 80) => chrome.windows.create({
-    type: 'popup',
-    focused: false,
-    url: '/data/sounds/index.html?volume=' + volume + '&src=' + src,
-    ...navigator.platform.startsWith('Win') ? {
-      top: 10000,
-      left: 10000,
-      height: 20,
-      width: 200
-    } : {
-      top: 1,
-      left: 1,
-      height: 1,
-      width: 1
+// notification.sound = {
+//   play: (src, volume = 80) => chrome.windows.create({
+//     type: 'popup',
+//     focused: false,
+//     url: '/data/sounds/index.html?volume=' + volume + '&src=' + src,
+//     ...navigator.platform.startsWith('Win') ? {
+//       top: 10000,
+//       left: 10000,
+//       height: 20,
+//       width: 200
+//     } : {
+//       top: 1,
+//       left: 1,
+//       height: 1,
+//       width: 1
+//     }
+//   }),
+//   stop: () => chrome.runtime.sendMessage({
+//     method: 'close-audio'
+//   }, () => chrome.runtime.lastError)
+// };
+notification.sound = (() => {
+  const audio = document.createElement('audio');
+  audio.setAttribute('preload', 'auto');
+  audio.setAttribute('autobuffer', 'true');
+
+  return {
+    play: (src, volume = 80) => {
+      audio.src = src;
+      audio.volume = volume / 100;
+      audio.play();
+    },
+    stop: () => {
+      audio.pause();
+      audio.currentTime = 0;
     }
-  }),
-  stop: () => chrome.runtime.sendMessage({
-    method: 'close-audio'
-  }, () => chrome.runtime.lastError)
-};
+  };
+})();
 
 // alert notification
 notification.on('notify', ({objs, sound, policies, volume}) => {

@@ -4,14 +4,7 @@
 const utils = {};
 
 utils.clipboard = {};
-utils.clipboard.copy = str => new Promise(resolve => {
-  document.oncopy = e => {
-    e.clipboardData.setData('text/plain', str);
-    e.preventDefault();
-    resolve();
-  };
-  document.execCommand('Copy', false, null);
-});
+utils.clipboard.copy = str => navigator.clipboard.writeText(str);
 
 utils.notify = async message => chrome.runtime.sendMessage({
   method: 'notify',
