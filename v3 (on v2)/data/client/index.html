@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Client</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="../medium-style-confirm/css/msc-style.css">
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline';">
+</head>
+<body>
+  <div id="sidebar">
+    <iframe id="tree" src="about:blank"></iframe>
+  </div>
+  <div id="content">
+    <iframe id="search" src="about:blank"></iframe>
+    <iframe id="list" src="about:blank"></iframe>
+  </div>
+  <div id="popup" class="hide">
+    <iframe src="about:blank" sandbox="allow-scripts allow-popups allow-same-origin allow-modals" name="popup"></iframe>
+  </div>
+  <script src="/webext.js"></script>
+  <script src="../api.js"></script>
+  <script async src="../medium-style-confirm/js/msc-script.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

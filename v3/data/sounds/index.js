@@ -1,18 +1,13 @@
-window.resizeTo(0, 0);
-
-window.onload = () => {
-  const args = new URLSearchParams(window.location.search);
-  const audio = new Audio(args.get('src'));
-
-  audio.volume = Number(args.get('volume') || 100) / 100;
-  audio.onended = function() {
-    window.close();
-  };
-  audio.play();
-};
+let timeout;
 
 chrome.runtime.onMessage.addListener(request => {
-  if (request.method === 'close-audio') {
-    window.close();
+  if (request.target === 'offscreen' && request.method === 'play') {
+    const audio = new Audio(request.src);
+    audio.volume = request.volume / 100;
+    audio.onended = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => window.close(), 1000);
+    };
+    audio.play();
   }
 });

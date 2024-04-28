@@ -11,8 +11,8 @@ native.notmuch.show = ({
   format = 'json',
   mime
 }) => {
-  // console.log(query);
-  // console.log(new Error().stack);
+  console.log(query);
+  console.log(new Error().stack);
 
   native.log('native.notmuch.show', query, body, exclude, entire, html, part, format);
   return webext.runtime.connectNative(native.id, {

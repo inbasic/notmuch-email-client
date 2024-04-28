@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Email Reply</title>
+    <link rel="stylesheet" href="index.css">
+    <base target="_blank">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';  script-src 'self';">
+  </head>
+
+  <body data-loading=true>
+    <datalist id="accounts"></datalist>
+    <table class="headers">
+      <tr>
+        <td>From</td>
+        <td><input type="search" id="From" list=accounts></td>
+      </tr>
+      <tr>
+        <td>In-reply-to</td>
+        <td><input type="text" id="In-reply-to"></td>
+      </tr>
+      <tr>
+        <td>References</td>
+        <td><input type="text" id="References"></td>
+      </tr>
+      <tr>
+        <td>Subject</td>
+        <td><input type="text" id="Subject"></td>
+      </tr>
+      <tr>
+        <td>To</td>
+        <td>
+          <div hbox>
+            <input type="text" id="To">
+            <input type="button" value="Reply" id="reply">
+            <input type="button" value="Close" id="close-me">
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div id="tools"></div>
+    <div contenteditable="true" id="body">
+      <br>
+      <br>
+      <span></span>
+      <br>
+      <br>
+      <blockquote id="content"></blockquote>
+    </div>
+
+    <script src="../show/parse.js"></script>
+    <script src="/webext.js"></script>
+    <script src="../utils.js"></script>
+    <script src="/config.js"></script>
+    <script src="build.js"></script>
+    <script src="reply.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

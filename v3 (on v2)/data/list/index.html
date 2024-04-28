@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>This is a list</title>
+    <link rel="stylesheet" href="index.css">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline';">
+  </head>
+
+  <body>
+    <div id="toolbar">
+      <div>
+        <div class="list" data-visible=false>
+          <span></span>
+          <ul>
+            <li data-cmd="select-all">All</li>
+            <li data-cmd="select-none">None</li>
+            <li data-cmd="select-read">Read</li>
+            <li data-cmd="select-unread">Unread</li>
+            <li data-cmd="select-starred">Starred</li>
+            <li data-cmd="select-unstarred">Unstarred</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <input type="button" data-cmd="archive" class="selection">
+        <input type="button" data-cmd="spam" class="selection">
+        <input type="button" data-cmd="trash" class="selection">
+        <input type="button" data-cmd="mark-as-read" value="Mark as read" class="selection no-icon" id="mark-as">
+      </div>
+
+      <div>
+        <input type="button" data-cmd="open" value="Open" class="selection no-icon" title="Use Shift + Click to open the entire thread">
+        <input type="button" data-cmd="reply" value="Reply" class="single no-icon" title="Use Shift + Click to reply to all">
+      </div>
+
+      <div>
+        <input type="button" data-cmd="refresh">
+        <div class="list" data-visible=false>
+          <span></span>
+          <label>Extra</label>
+          <ul id="extra">
+            <li data-cmd="mark-as-unread" class="selection">Make as unread</li>
+            <li data-cmd="add-tags" class="selection">Add new tags</li>
+            <li class="separator"></li>
+            <li data-cmd="move-to" class="selection" data-active=false>
+              <span>Move to a folder</span>
+              <div>
+                <iframe src="about:blank"></iframe>
+                <div>
+                  <input type="button" data-cmd="move-cancel" value="Cancel" class="no-icon">
+                  <input type="button" data-cmd="move-ok" value="Move" class="no-icon">
+                </div>
+              </div>
+            </li>
+            <li class="separator"></li>
+            <li data-cmd="copy-ids" class="selection">Copy selected IDs</li>
+            <li data-cmd="copy-filenames" class="selection">Copy filenames</li>
+            <li data-cmd="copy-actions">Copy last 30 actions</li>
+          </ul>
+        </div>
+      </div>
+      <input type="search" placeholder="Select matched" id="matched" title="Use 'OR' keyword for multiple matches">
+      <span></span>
+      <div id="stat">
+        <span><span id="selected"></span> <b id="start"></b>-<b id="end"></b></b> of <b id="total">-</b></span>&nbsp;
+        <input type="button" data-cmd="older" disabled="true">
+        <input type="button" data-cmd="newer" disabled="true">
+      </div>
+    </div>
+    <div id="root">
+      <table width=100%>
+        <colgroup>
+          <col width="2px">
+          <col width="27px">
+          <col width="32px">
+          <col width="40px">
+          <col width="200px" data-id="authors">
+          <col>
+          <col width="96px">
+        </colgroup>
+        <template id="tag">
+          <div>
+            <span></span>
+            <span data-cmd="remove-tag">x</span>
+          </div>
+        </template>
+        <template id="entry">
+          <tr data-unread=true>
+            <td data-id="active">
+              <input type="radio" name="entry">
+              <!-- fake command is to prevent show module to open the thread -->
+              <label data-cmd="fake-command"></label>
+            </td>
+            <td data-id="select">
+              <!-- fake command is to prevent show module to open the thread -->
+              <label data-cmd="fake-command">
+                <span></span>
+              </label>
+            </td>
+            <td data-id="star" data-cmd="toggle-flag"></td>
+            <td data-id="stat">-</td>
+            <td data-id="authors">-</td>
+            <td data-id="subject">
+              <div data-id="tags"></div>
+              <div></div>
+            </td>
+            <td data-id="date">-</td>
+          </tr>
+        </template>
+        <tbody id="content"></tbody>
+      </table>
+    </div>
+    <script src="/config.js"></script>
+    <script src="undo.js"></script>
+    <script async src="index.js"></script>
+    <script src="/webext.js"></script>
+    <script src="build.js"></script>
+    <script src="/data/utils.js"></script>
+    <script async src="commands.js"></script>
+    <script async src="plugins/user-commands.js"></script>
+    <!-- <script async src="plugins/async-menu.js"></script> -->
+  </body>
+</html>

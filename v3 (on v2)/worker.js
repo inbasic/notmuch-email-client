@@ -1,15 +1,15 @@
 /* global native, webext */
 
-self.importScripts('config.js');
-self.importScripts('webext.js');
-self.importScripts(
-  'native/base.js', 'native/native.exec.js', 'native/native.files.js', 'native/native.policy.js',
-  'native/notmuch.tag.js', 'native/notmuch.new.js', 'native/notmuch.reply.js', 'native/notmuch.search.js',
-  'native/notmuch.count.js', 'native/notmuch.config.js', 'native/notmuch.show.js'
-);
-self.importScripts('badge.js');
-self.importScripts('notification.js');
-self.importScripts('context.js');
+// self.importScripts('config.js');
+// self.importScripts('webext.js');
+// self.importScripts(
+//   'native/base.js', 'native/native.exec.js', 'native/native.files.js', 'native/native.policy.js',
+//   'native/notmuch.tag.js', 'native/notmuch.new.js', 'native/notmuch.reply.js', 'native/notmuch.search.js',
+//   'native/notmuch.count.js', 'native/notmuch.config.js', 'native/notmuch.show.js'
+// );
+// self.importScripts('badge.js');
+// self.importScripts('notification.js');
+// self.importScripts('context.js');
 
 const localStorage = {
   getItem(name) {
@@ -126,7 +126,7 @@ webext.runtime.on('message', request => {
         if (reason === 'install' || (prefs.faqs && reason === 'update')) {
           const doUpdate = (Date.now() - prefs['last-update']) / 1000 / 60 / 60 / 24 > 45;
           if (doUpdate && previousVersion !== version) {
-            tabs.query({active: true, lastFocusedWindow: true}, tbs => tabs.create({
+            tabs.query({active: true, currentWindow: true}, tbs => tabs.create({
               url: page + '?version=' + version + (previousVersion ? '&p=' + previousVersion : '') + '&type=' + reason,
               active: reason === 'install',
               ...(tbs && tbs.length && {index: tbs[0].index + 1})
