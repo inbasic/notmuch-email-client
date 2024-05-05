@@ -111,7 +111,7 @@ document.addEventListener('click', async e => {
     utils.files(query).then(files => {
       utils.clipboard.copy(files.join('\n'));
       utils.notify(files.length + ' file(s) copied to the clipboard');
-    }).catch(e => console.log(e));
+    }).catch(e => console.error(e));
   }
   else if (cmd === 'open') {
     if (window.top !== window) {

@@ -160,7 +160,7 @@ view.on('search', ({start}) => {
     method: 'notmuch.search'
   }, args), r => {
     if (r.error) {
-      console.log(r);
+      console.error(r);
       tbody.dataset.error = r.message || (r.error ? r.error.stderr : '') || 'unexpected error!';
       tbody.dataset.loading = false;
     }
@@ -178,7 +178,7 @@ view.on('refresh', (count = false) => chrome.runtime.sendMessage(Object.assign({
   method: 'notmuch.search'
 }, args), r => {
   if (r.error) {
-    console.log(r);
+    console.error(r);
   }
   else {
     const threads = r.responses.reduce((p, c) => {

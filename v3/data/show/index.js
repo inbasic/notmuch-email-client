@@ -11,6 +11,7 @@
   }
 }
 
+/* we cannot send ArrayBuffer from worker to page */
 const get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
   method: 'notmuch.show',
   query: 'id:' + id,
@@ -18,7 +19,26 @@ const get = (id, obj) => new Promise(resolve => chrome.runtime.sendMessage({
   format: 'raw',
   html: false,
   mime: obj['content-type']
-}, resolve));
+}, o => {
+  const port = chrome.runtime.connectNative(o.id);
+  const parts = [];
+  port.onMessage.addListener(e => {
+    if (e.stdout) {
+      parts.push(e.stdout.data);
+    }
+    else if ('code' in e) {
+      port.disconnect();
+
+      const bytes = new Uint8Array(parts.flat());
+      const blob = new Blob([bytes], {
+        type: obj['content-type']
+      });
+      const url = URL.createObjectURL(blob);
+      resolve(url);
+    }
+  });
+  port.postMessage(o.options);
+}));
 
 const args = location.search.replace('?', '').split('&').reduce((p, c) => {
   const [key, value] = c.split('=');
@@ -50,7 +70,7 @@ if (args.query) {
       });
     }
     catch (e) {
-      console.log(e);
+      console.error(e);
       document.body.textContent = e.message;
     }
   });
@@ -66,6 +86,8 @@ document.addEventListener('click', ({target}) => {
     get(target.dataset.id, target.attachment).then(url => chrome.downloads.download({
       url,
       filename: target.attachment.filename
+    }, d => {
+      URL.revokeObjectURL(url);
     }));
   }
   else if (cmd === 'close-me') {

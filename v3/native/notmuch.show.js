@@ -15,7 +15,8 @@ native.notmuch.show = ({
   // console.log(new Error().stack);
 
   native.log('native.notmuch.show', query, body, exclude, entire, html, part, format);
-  return webext.runtime.connectNative(native.id, {
+
+  const options = {
     permissions: ['child_process', 'os'],
     args: [
       native.path,
@@ -60,7 +61,16 @@ native.notmuch.show = ({
       });
       notmuch.stdin.end();
     `
-  }).build().then(r => {
+  };
+
+  if (format === 'raw') {
+    return Promise.resolve({
+      id: native.id,
+      options
+    });
+  }
+
+  return webext.runtime.connectNative(native.id, options).build().then(r => {
     if (format === 'json') {
       const content = r.responses.map(o => o.stdout).join('');
 
@@ -68,14 +78,6 @@ native.notmuch.show = ({
         content: JSON.parse(content)
       };
     }
-    const bytes = new Uint8Array([].concat(...r.responses.map(({stdout}) => stdout.data)));
-    const blob = new Blob([bytes], {
-      type: mime
-    });
-    const url = URL.createObjectURL(blob);
-    window.setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 30000);
-    return url;
+    throw Error('NOT_SUPPORTED_' + format);
   });
 };
