@@ -1,6 +1,7 @@
+/* global get */
 'use strict';
 
-var parse = function(json) {
+const parse = function(json) {
   const parts = [];
 
   function step(json) {
@@ -49,15 +50,20 @@ var parse = function(json) {
           text: json.content
         };
       }
-      console.log('missed section', json);
+      console.info('missed section', json);
     }
     else if (json['content-disposition'] === 'attachment' || json['content-disposition'] === 'inline') {
       return {
         attachment: json
       };
     }
+    else if (json.filename) {
+      return {
+        attachment: json
+      };
+    }
     else {
-      console.log('missed section', json);
+      console.info('missed section', json);
     }
   }
   step(json);
@@ -128,13 +134,9 @@ parse.iframe = ({
           if (img.src.startsWith('cid:')) {
             const o = part.attachments.filter(o => 'cid:' + o.attachment['content-id'] === img.src).shift();
             if (o) {
-              chrome.runtime.sendMessage({
-                method: 'notmuch.show',
-                query: 'id:' + part.headers.id,
-                part: o.attachment.id,
-                format: 'raw',
-                html: false
-              }, url => img.src = url);
+              get(part.headers.id, o.attachment).then(src => {
+                img.src = src;
+              });
             }
           }
           else if (type === 'safe') {
