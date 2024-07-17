@@ -273,7 +273,9 @@ webext.notifications.create = options => {
     type: 'basic',
     iconUrl: 'data/icons/48.png'
   }, options);
-  chrome.notifications.create(options);
+  chrome.notifications.create(null, options, id => {
+    setTimeout(chrome.notifications.clear, 5000, id);
+  });
 };
 webext.policy(webext.notifications);
 
